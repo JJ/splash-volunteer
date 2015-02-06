@@ -1,0 +1,6 @@
+{
+  "name": "Node.js Getting Started",
+  "description": "A GA back-end, Developed from A barebones Node.js app using Express 4",
+  "repository": "https://github.com/JJ/FOSDEM-lightning-2015",
+  "keywords": ["node", "express", "static"]
+}

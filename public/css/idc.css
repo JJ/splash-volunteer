@@ -1,0 +1,210 @@
+/** fonts **/
+
+@import url(http://fonts.googleapis.com/css?family=Montserrat);
+@import url(http://fonts.googleapis.com/css?family=Lato);
+@import url(http://fonts.googleapis.com/css?family=Lekton);
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+/** GENERAL **/
+body {
+	font-family: Verdana, sans-serif;
+/*	min-height: 740px; */
+	background-color: black;
+	-webkit-font-smoothing: antialiased;
+}
+
+/** STEP STYLES **/
+.step {
+	width: 900px;
+	height: 600px;
+	font-size: 1em;
+/*	min-height: 600px; */
+	background-color: #f1f0ff;
+
+	display: block;
+	padding: 40px 60px;
+	border-radius: 20px;
+
+	box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
+	border: 1px solid rgba(0, 0, 0, .3);
+	
+	color: rgb(102, 102, 102);
+	text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+	
+    letter-spacing: -1px;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing:    border-box;
+	-ms-box-sizing:     border-box;
+	-o-box-sizing:      border-box;
+	box-sizing:         border-box;
+
+	-webkit-transition: opacity 1s;
+	-moz-transition:    opacity 1s;
+	-ms-transition:     opacity 1s;
+	-o-transition:      opacity 1s;
+	transition:         opacity 1s;
+}
+
+/* fade out inactive slides */
+.step:not(.active) {
+	opacity: 0.3;
+}
+
+/* hint on the first slide */
+.hint {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0px;
+
+	background: #333;
+	color: #fff;
+	text-align: right;
+
+	padding: 10px;
+	z-index: 100;
+
+	opacity: 0;
+
+	-webkit-transform: translateY(400px);
+	-moz-transform:    translateY(400px);
+	-ms-transform:     translateY(400px);
+	-o-transform:      translateY(400px);
+	transform:         translateY(400px);
+
+	-webkit-transition: opacity 1s, -webkit-transform 0.5s 1s;
+	-moz-transition:    opacity 1s,    -moz-transform 0.5s 1s;
+	-ms-transition:     opacity 1s,     -ms-transform 0.5s 1s;
+	-o-transition:      opacity 1s,      -o-transform 0.5s 1s;
+	transition:         opacity 1s,         transform 0.5s 1s;
+}
+.step-home + .hint {
+	opacity: 1;
+
+	-webkit-transition: opacity 1s 5s, -webkit-transform 0.5s;
+	-moz-transition:    opacity 1s 5s,    -moz-transform 0.5s;
+	-ms-transition:     opacity 1s 5s,     -ms-transform 0.5s;
+	-o-transition:      opacity 1s 5s,      -o-transform 0.5s;
+	transition:         opacity 1s 5s,         transform 0.5s;
+
+	-webkit-transform: translateY(0px);
+	-moz-transform:    translateY(0px);
+	-ms-transform:     translateY(0px);
+	-o-transform:      translateY(0px);
+	transform:         translateY(0px);
+}
+
+/* Color combo from http://www.colorcombos.com/color-schemes/14/ColorCombo14.html */
+
+h1 {font-size:4em;    
+    font-family: "Montserrat", sans-serif;
+    color: #443266;}
+
+h1.img {font-size:3em;    
+	padding: 20px;
+	font-family: "Montserrat", sans-serif;
+	color: #443266;
+	background-color: rgba(241,240,255,0.7);;
+       }
+
+h1.right { position: absolute;
+	   top:30px;
+	   left:400px}
+
+h2 {font-size:3em;
+    font-family: "Lato", sans-serif;
+    color: #47423F;
+    background-color:rgba(250,240,230,0.7);
+    padding: 10px;}
+
+h3 {font-size:2em;
+    font-family: "Roboto", sans-serif;}
+
+code { 
+       font-family: Lekton, Courier, Courier New, monospace;
+       font-size: 1.1em;
+       background-color: black;
+       color: lightgreen;
+       font-weight:bold;
+       margin: 2px;
+       padding: 2px;
+       -moz-border-radius: 10px;
+       border-radius: 10px;
+}
+
+/* Customization */
+img { width: 90%;
+      height: 90%;
+      position: absolute;
+      top:30px;
+      left:30px;
+      z-index: -1}
+
+imb.bg { width: 100%;
+      position: absolute;
+      top:0px;
+      z-index: -1}
+
+img.center { width: 90%;
+      position: absolute;
+      top:250px;
+      z-index: -1}
+
+img.figures { width: 700px;
+      z-index: -1}
+
+p.image { 
+          position: absolute;
+          bottom:  0;
+          right: 0;
+          font-size: 1em;
+          background-color:rgba(230,240,250,0.5);
+          padding: 5px;
+ }
+
+/** NOT SUPPORTED STYLES **/
+.not-supported .step {
+	position: relative;
+	opacity: 1;
+	margin: 20px auto;
+}
+
+/** PRINT STYLE **/
+@media print {
+	body {
+		background: white;
+	}
+	.hint {
+		display: none;
+	}
+	#simple {
+		width: auto; 
+		margin: 0 5%;
+		padding: 0; 
+		border: 0;
+		float: none !important;
+		color: black; 
+		background: transparent;
+	}
+	.step {
+		page-break-after: always;
+		opacity: 1;
+		clear: both;
+		display: block;
+		float: none !important;
+		position: relative;
+		margin: 20px auto;
+
+		-webkit-transition: rotate(0deg);
+		-moz-transition:    rotate(0deg);
+		-ms-transition:     rotate(0deg);
+		-o-transition:      rotate(0deg);
+		transition:         rotate(0deg);
+	}
+	.step:not(.active) {
+		opacity: 1;
+	}
+}
+
+span.smaller { font-size:0.8em }

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>All your cycles are belong to us</title>
+
+		<meta name="description" content="A presentation for FLOSS community metrics">
+		<meta name="author" content="JJ Merelo">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/blood.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="css/extra.css">
+
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		
+		<!-- presentations -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src='js/Chart.min.js'></script>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+	  <div id='graph' style="position:absolute; top:20px; right:20px; z-index:3">    
+	    <!-- top right corner evolution graph -->
+	    <canvas id="fitness" width="240" height="180"></canvas>
+	  </div>
+	  
+	  <div class="reveal">
+	    
+	    <!-- Any section element inside of this container is displayed as a slide -->
+	    <div class="slides">
+	      <section>
+		<h1><small>All your cycles are belong to us</small></h1>
+		<h3>Volunteer computing in the age of the ubiquituous browser</h3>
+		<p>
+		  <small>By <a href="http://medium.com/@jjmerelo">JJ Merelo</a> / <a href="http://twitter.com/jjmerelo"><code>@jjmerelo</code></a>, <a href='http://geneura.wordpress.com'>GeNeura research group</a> and <a href='http://osl.ugr.es'>Free Software Office, UGR</a></small>
+		</p>
+	      </section>
+
+	      <section data-background='img/screens.png'>
+		<h1 class='bkg'>Computing cycles are aplenty</h1>
+	      </section>
+
+	      <section data-background='img/begging.jpg'>
+		<h1 class='bkg'>Why not give a few to science?</h1>
+		<h2 class='bkg'>Or enterprise</h2>
+		<h3 class='bkg'>... Or just for kicks</h3>
+	      </section>
+
+	       <section data-background='img/totems-by-frana-blaylock.jpg'>
+		 <h1 class='bkg'>We need a <em>potlatch</em></h1>
+		 <h2 class='bkg fragment'>We all give!</h2>
+		 <h2 class='bkg fragment'>And get!</h2>
+	      </section>
+
+	      <section>
+		  <h1>Potlatch arose from surpluses</h1>
+
+		  <h2 class='fragment'>You only give what you've got to spare</h2>
+	      </section>
+
+	      <section>
+		<h1>You might be giving out already.</h1>
+		<h2 class='fragment'>Just browse this presentation</h2>
+	      </section>
+
+	      <section data-background='img/wing.jpg'>
+		<h1 class='bkg'>A distributed evolutionary algorithm</h1>
+		<h2 class='bkg'>Right there, in your browser</h2>
+	      </section>
+
+	      <section style="text-align: left;">
+		<h1>Fitness</h1>
+		<!-- zooms graph -->
+	      </section>
+
+	      <section style="text-align: left;">
+		<h1>Thanks!</h1>
+		<h2>Questions?</h2>
+		<ul>
+		  <li><a href="https://github.com/JJ/FOSDEM-lightning-2015">Get this</a></li>
+		</ul>
+	      </section>
+
+	      <section>
+		<h2>Image credits</h2>	
+		<ul>
+		  <li>Screens by <a href='https://www.flickr.com/photos/jenny8lee/5804768210'> Jennifer 8. Lee</a></li>
+		  <li>Begging: Flickr image from <a href='https://www.flickr.com/photos/nationaalarchief/5371990429'>Nationaal Archief @ <code>flic.kr/p/9bGRAD</code></a></li>
+		  <li>Totems: Image by <a href='https://www.flickr.com/photos/11909427@N07/3119247124'>Frana Blaylock <code>flic.kr/p/5KCXuQ</code></a></li>
+		  <li>Wings From <a href='https://www.flickr.com/photos/internetarchivebookimages/14780730844#'>The descent of man by Darwin</a></li>
+		</ul>
+	      </section>
+	    </div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		 Reveal.addEventListener( 'slidechanged', function( event ) {
+		   if ( event.indexh === 7 ) {
+		     var graphdiv = document.getElementById('graph');
+		     graphdiv.style.right='450px';
+		     var graph= document.getElementById('fitness');
+		     graph.style.width='800px';
+		     graph.style.height='600px';
+		   }
+		    if ( event.indexh === 8 ) {
+		     var graphdiv = document.getElementById('graph');
+		     graphdiv.style.right='20px';
+		     var graph= document.getElementById('fitness');
+		     graph.style.width='240px';
+		     graph.style.height='180px';
+		   }
+		 } );
+		</script>
+		<script type="text/javascript" src='js/trap.standalone.js'></script>
+
+	</body>
+</html>

@@ -23,4 +23,43 @@ describe( "Puts and returns chromosome", function() {
 		done();
 	    });
     });
+    it('should return log', function (done) {
+	request(app)
+	    .get('/log')
+	    .expect('Content-Type', /json/)
+	    .expect(200)
+	    .end( function ( error, resultado ) {
+		if ( error ) {
+		    return done( error );
+		}
+		resultado.body.should.be.instanceof(Array);
+		done();
+	    });
+    });
+    it('should return chromosomes', function (done) {
+	request(app)
+	    .get('/chromosomes')
+	    .expect('Content-Type', /json/)
+	    .expect(200)
+	    .end( function ( error, resultado ) {
+		if ( error ) {
+		    return done( error );
+		}
+		resultado.body.should.be.instanceof(Object);
+		done();
+	    });
+    });
+    it('should return IPs', function (done) {
+	request(app)
+	    .get('/IPs')
+	    .expect('Content-Type', /json/)
+	    .expect(200)
+	    .end( function ( error, resultado ) {
+		if ( error ) {
+		    return done( error );
+		}
+		resultado.body.should.be.instanceof(Object);
+		done();
+	    });
+    });
 });

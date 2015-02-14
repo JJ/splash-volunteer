@@ -26,6 +26,16 @@ app.get('/log', function(req, res){
 	    res.send( log );
 });
 
+// Retrieves the chromosomes
+app.get('/chromosomes', function(req, res){
+	    res.send( chromosomes );
+});
+
+// Retrieves the chromosomes
+app.get('/IPs', function(req, res){
+	    res.send( IPs );
+});
+
 // Adds one chromosome to the pool
 app.put('/one/:chromosome', function(req, res){
 	    if ( req.params.chromosome ) {

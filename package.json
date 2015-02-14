@@ -1,5 +1,5 @@
 {
-  "name": "node-js-getting-started",
+  "name": "Nodio",
   "version": "0.1.0",
   "description": "A sample Node.js app using Express 4",
   "main": "index.js",
@@ -12,20 +12,24 @@
       "nodeo": "0.0.5"
   },
   "engines": {
-    "node": "0.10.x"
+      "node": ">=0.10.x",
+      "npm": ">= 1.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/heroku/node-js-getting-started"
   },
   "keywords": [
-    "node",
-    "heroku",
-    "express"
+      "node",
+      "heroku",
+      "openshift",
+      "node.js",
+      "express"
   ],
-  "author": "Mark Pundsack",
+  "author": "Mark Pundsack modified by JJ Merelo",
   "contributors": [
-    "Zeke Sikelianos <zeke@sikelianos.com> (http://zeke.sikelianos.com)"
+    "Zeke Sikelianos <zeke@sikelianos.com> (http://zeke.sikelianos.com)",
+      "JJ Merelo <jjmerelo@gmail.com> (http://jj.github.io)"
   ],
   "license": "MIT",
   "devDependencies": {

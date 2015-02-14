@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
 
-app.set('port', (process.env.PORT || 5555))
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'; 
+app.set('port', (process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5555))
 app.use(express.static(__dirname + '/public'))
 
 var log = [];
@@ -58,7 +59,7 @@ app.use(function(err, req, res, next){
 });
 
 // Start listening
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), server_ip_address, function() {
   console.log("Node app is running at localhost:" + app.get('port'))
 })
 

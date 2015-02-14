@@ -4,13 +4,9 @@ var app = express();
 app.set('port', (process.env.PORT || 5555))
 app.use(express.static(__dirname + '/public'))
 
-//app.get('/', function(request, response) {
-//  response.send('Hello World!')
-//})
-
-// console.log(conf);
 var log = [];
 var chromosomes = {};
+var IPs = {};
 
 // Retrieves a random chromosome
 app.get('/random', function(req, res){
@@ -33,7 +29,8 @@ app.get('/log', function(req, res){
 // Adds one chromosome to the pool
 app.put('/one/:chromosome', function(req, res){
 	    if ( req.params.chromosome ) {
-		chromosomes[ req.params.chromosome ] = 1; // to avoid repeated chromosomes
+		chromosomes[ req.params.chromosome ]++; // to avoid repeated chromosomes
+		IPs[ req.connection.remoteAddress ]++;
 		log.push( { put: process.hrtime(),
 			    chromosome: req.params.chromosome,
 			    IP: req.connection.remoteAddress } );

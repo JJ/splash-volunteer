@@ -1,2 +1,3 @@
-# splash-volunteer
-Splash page for PaaS based volunteer computing experiments
+# Single page volunteer computing platform
+
+Splash page for PaaS based volunteer computing experiments. 

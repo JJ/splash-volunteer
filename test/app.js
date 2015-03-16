@@ -3,6 +3,13 @@ should = require('should'),
 app = require('../index.js'),
 one_chromosome = "101101101101";
 
+describe( "Loads configurarion correctly", function() {
+    it('Should set repo correctly', function( done ) {
+	app.config.should.have.property('repository', "https://github.com/JJ/splash-volunteer");
+	done();
+    });
+});
+
 describe( "Puts and returns chromosome", function() {
     it('should return correct type', function (done) {
 	request(app)

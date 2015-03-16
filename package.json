@@ -7,29 +7,30 @@
     "start": "node index.js"
   },
   "dependencies": {
-      "express": "~3.4.x",
-      "mocha": "~2.1.x",
-      "nodeo": "0.0.5"
+    "express": "~3.4.x",
+    "mocha": "~2.1.x",
+    "nodeo": "0.0.5",
+    "app.json": "~1.2.1"
   },
   "engines": {
-      "node": ">=0.10.x",
-      "npm": ">= 1.0.0"
+    "node": ">=0.10.x",
+    "npm": ">= 1.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/heroku/node-js-getting-started"
   },
   "keywords": [
-      "node",
-      "heroku",
-      "openshift",
-      "node.js",
-      "express"
+    "node",
+    "heroku",
+    "openshift",
+    "node.js",
+    "express"
   ],
   "author": "Mark Pundsack modified by JJ Merelo",
   "contributors": [
     "Zeke Sikelianos <zeke@sikelianos.com> (http://zeke.sikelianos.com)",
-      "JJ Merelo <jjmerelo@gmail.com> (http://jj.github.io)"
+    "JJ Merelo <jjmerelo@gmail.com> (http://jj.github.io)"
   ],
   "license": "MIT",
   "devDependencies": {

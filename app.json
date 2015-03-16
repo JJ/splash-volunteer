@@ -1,6 +1,9 @@
 {
-  "name": "Nodio, evolutionary algorithm on the browser.",
-  "description": "A back-end for a GA, Developed from A barebones Node.js app using Express 4",
-  "repository": "https://github.com/JJ/splash-volunteer",
-  "keywords": ["node", "express", "static", "evolutionary algorithms"]
+    "name": "Nodio, evolutionary algorithm on the browser.",
+    "description": "A back-end for a GA, Developed from A barebones Node.js app using Express 4",
+    "repository": "https://github.com/JJ/splash-volunteer",
+    "keywords": ["node", "express", "static", "evolutionary algorithms"],
+    "env": {
+	"TARGET_CHROMOSOME": "string"
+    }
 }

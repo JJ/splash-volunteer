@@ -1,5 +1,8 @@
 var express = require('express');
 var app = express();
+var App = require("app.json");
+
+app.config = App.new(__dirname + "/app.json");
 
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'; 
 app.set('port', (process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5555))

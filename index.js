@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var App = require("app.json");
+app.is_solution = require("./is_solution.js");
 
 app.config = App.new(__dirname + "/app.json");
 

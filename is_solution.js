@@ -2,10 +2,11 @@
 
 var traps = 30;
 var b = 2;
-exports.is_solution = function( chromosome ) {
+module.exports = exports = function( chromosome ) {
+
     if ( chromosome.fitness < traps*b ) {
 	return false;
     } else {
 	return true;
     }
-}
+};

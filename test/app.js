@@ -1,11 +1,20 @@
 var request = require('supertest'), 
 should = require('should'),
 app = require('../index.js'),
-one_chromosome = "101101101101";
+one_chromosome = "101101101101",
+great_chromosome = { "string": "whatever",
+		     "fitness": 60 };
 
-describe( "Loads configurarion correctly", function() {
+describe( "Loads configuration correctly", function() {
     it('Should set repo correctly', function( done ) {
 	app.config.should.have.property('repository', "https://github.com/JJ/splash-volunteer");
+	done();
+    });
+});
+
+describe( "Loads termination correctly", function() {
+    it('Should terminate when needed', function( done ) {
+	app.is_solution(great_chromosome).should.be.ok;
 	done();
     });
 });

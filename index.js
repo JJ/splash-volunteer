@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+// Used for configuration and by Heroku
 var App = require("app.json");
 
 // Includes termination condition

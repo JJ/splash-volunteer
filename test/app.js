@@ -1,7 +1,8 @@
 var request = require('supertest'), 
 should = require('should'),
 app = require('../index.js'),
-one_chromosome = "101101101101",
+one_chromosome = { "string": "101101101101",
+		   "fitness": 0 },
 great_chromosome = { "string": "whatever",
 		     "fitness": 60 };
 
@@ -14,7 +15,7 @@ describe( "Loads configuration correctly", function() {
 
 describe( "Loads termination correctly", function() {
     it('Should terminate when needed', function( done ) {
-	app.is_solution(great_chromosome).should.be.ok;
+	app.is_solution(great_chromosome.string,great_chromosome.fitness).should.be.ok;
 	done();
     });
 });
@@ -22,7 +23,7 @@ describe( "Loads termination correctly", function() {
 describe( "Puts and returns chromosome", function() {
     it('should return correct type', function (done) {
 	request(app)
-	    .put('/one/'+one_chromosome)
+	    .put('/one/'+one_chromosome.string+"/"+one_chromosome.fitness)
 	    .expect('Content-Type', /json/)
 	    .expect(200,done);
     });
@@ -35,7 +36,7 @@ describe( "Puts and returns chromosome", function() {
 		if ( error ) {
 		    return done( error );
 		}
-		resultado.body.should.have.property('chromosome', one_chromosome);
+		resultado.body.should.have.property('chromosome', one_chromosome.string);
 		done();
 	    });
     });

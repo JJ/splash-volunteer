@@ -19,7 +19,7 @@ app.get('/random', function(req, res){
     if (Object.keys(chromosomes ).length > 0) {
 	var keys = Object.keys(chromosomes );
 	var one = keys[ Math.floor(keys.length*Math.random())];
-	res.send({ chromosome : one });
+	res.send( { 'chromosome': one } );
 	log.push({ get: process.hrtime()});
     } else {
 	res.status(404).send('No chromosomes yet');
@@ -43,15 +43,15 @@ app.get('/IPs', function(req, res){
 });
 
 // Adds one chromosome to the pool
-app.put('/one/:chromosome', function(req, res){
+app.put('/one/:chromosome/:fitness', function(req, res){
     if ( req.params.chromosome ) {
-	chromosomes[ req.params.chromosome.string ]++; // to avoid repeated chromosomes
+	chromosomes[ req.params.chromosome ] = req.params.fitness; // to avoid repeated chromosomes
 	IPs[ req.connection.remoteAddress ]++;
 	log.push( { put: process.hrtime(),
 		    chromosome: req.params.chromosome,
 		    IP: req.connection.remoteAddress } );
 	res.send( { length : Object.keys(chromosomes).length });
-	if ( app.is_solution( chromosome ) ) {
+	if ( app.is_solution( req.params.chromosome, req.params.fitness ) ) {
 	    chromosomes = {};
 	    sequence++;
 	}

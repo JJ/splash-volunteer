@@ -1,0 +1,33 @@
+{
+  "name": "nodio-client",
+  "version": "0.0.1",
+  "description": "A client for nodio",
+  "main": "client-ea.js",
+  "scripts": {
+    "start": "node client-ea.js"
+  },
+  "dependencies": {
+    "nodeo": "0.0.5",
+    "app.json": "~1.2.1"
+  },
+  "engines": {
+    "node": ">=0.10.x",
+    "npm": ">= 1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JJ/splash-volunteer"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "openshift",
+    "node.js",
+    "evolutionary algorithms"
+  ],
+  "author": "JJ Merelo",
+  "contributors": [
+    "JJ Merelo <jjmerelo@gmail.com> (http://jj.github.io)"
+  ],
+  "license": "MIT"
+}

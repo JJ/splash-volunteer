@@ -1,12 +1,18 @@
 var express = require('express');
 var app = express();
 var App = require("app.json");
+
+// Includes termination condition
 app.is_solution = require("./is_solution.js");
 
+// Other configuration variables 
 app.config = App.new(__dirname + "/app.json");
 
+// configure for openshift or heroku
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'; 
 app.set('port', (process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5555))
+
+// set up static dir
 app.use(express.static(__dirname + '/public'))
 
 var log = [];
@@ -32,17 +38,17 @@ app.get('/log', function(req, res){
     res.send( log );
 });
 
-// Retrieves the chromosomes
+// Retrieves the whole chromosome pool
 app.get('/chromosomes', function(req, res){
     res.send( chromosomes );
 });
 
-// Retrieves the chromosomes
+// Retrieves the IPs used
 app.get('/IPs', function(req, res){
     res.send( IPs );
 });
 
-// Adds one chromosome to the pool
+// Adds one chromosome to the pool, with fitness
 app.put('/one/:chromosome/:fitness', function(req, res){
     if ( req.params.chromosome ) {
 	chromosomes[ req.params.chromosome ] = req.params.fitness; // to avoid repeated chromosomes

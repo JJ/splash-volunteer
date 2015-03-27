@@ -7,7 +7,7 @@
     "start": "node client-ea.js"
   },
   "dependencies": {
-    "nodeo": "0.0.5",
+    "nodeo": "0.1.0",
     "app.json": "~1.2.1"
   },
   "engines": {

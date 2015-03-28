@@ -2,7 +2,7 @@
     "host": "localhost",
     "port": 5000,
     "generation_run": 20,
-    "max_evaluations": 1000000,
+    "max_evaluations": 5000000,
     "population_size": 512,
     "output_preffix": "testing",
     "fitness": { "l": 4, 

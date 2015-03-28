@@ -1,7 +1,8 @@
-var express = require('express');
-var app = express();
-// Used for configuration and by Heroku
-var App = require("app.json");
+var express = require('express'),
+app = express(),
+winston = require('winston'),
+App = require("app.json"); // Used for configuration and by Heroku
+
 
 // Includes termination condition
 app.is_solution = require("./is_solution.js");
@@ -16,7 +17,14 @@ app.set('port', (process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5555))
 // set up static dir
 app.use(express.static(__dirname + '/public'))
 
-var log = [];
+// logger
+var logger = new (winston.Logger)({
+    transports: [
+	new (winston.transports.Console)( { level: 'info'} ),
+	new (winston.transports.File)({ filename: 'nodio.log', level: 'info' })
+    ]
+});
+
 var chromosomes = {};
 var IPs = {};
 var sequence = 0;
@@ -27,16 +35,11 @@ app.get('/random', function(req, res){
 	var keys = Object.keys(chromosomes );
 	var one = keys[ Math.floor(keys.length*Math.random())];
 	res.send( { 'chromosome': one } );
-	log.push({ get: process.hrtime()});
+	logger.info('get');
     } else {
 	res.status(404).send('No chromosomes yet');
     }
     
-});
-
-// Retrieves the log
-app.get('/log', function(req, res){
-    res.send( log );
 });
 
 // Retrieves the whole chromosome pool
@@ -54,14 +57,12 @@ app.put('/one/:chromosome/:fitness', function(req, res){
     if ( req.params.chromosome ) {
 	chromosomes[ req.params.chromosome ] = req.params.fitness; // to avoid repeated chromosomes
 	IPs[ req.connection.remoteAddress ]++;
-	log.push( { put: process.hrtime(),
-		    chromosome: req.params.chromosome,
-		    IP: req.connection.remoteAddress } );
+	logger.info("put", { chromosome: req.params.chromosome,
+			     IP: req.connection.remoteAddress } );
 	res.send( { length : Object.keys(chromosomes).length });
 	if ( app.is_solution( req.params.chromosome, req.params.fitness, app.config.vars.traps, app.config.vars.b ) ) {
 	    console.log( "Solution!");
-	    log.push( { put: process.hrtime(),
-			solution: req.params.chromosome } );
+	    logger.info( "finish", { solution: req.params.chromosome } );
 	    chromosomes = {};
 	    sequence++;
 	}

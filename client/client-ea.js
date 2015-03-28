@@ -49,15 +49,17 @@ function generation() {
 	console.log( eo.population[0] );
 	setImmediate(generation);
 
-	// get from pool
-	rest.get( url + 'random' ).on('complete', function( data ) {
-	    if ( data.chromosome ) {
-		eo.incorporate( data.chromosome );
-	    }
-	});
-
-	// put in pool
-	rest.put( url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
+	if (generation_count % 100 === 0 ) {
+	    // get from pool
+	    rest.get( url + 'random' ).on('complete', function( data ) {
+		if ( data.chromosome ) {
+		    eo.incorporate( data.chromosome );
+		}
+	    });
+	    
+	    // put in pool
+	    rest.put( url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
+	}
     } else {
 	log.push( {end: { 
 	    time: process.hrtime(),

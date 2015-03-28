@@ -31,6 +31,7 @@ if ( process.env.LOGGLY_TOKEN && process.env.LOGGLY_PASS && process.env.LOGGLY_U
 		{ inputToken: process.env.LOGGLY_TOKEN ,
 		  level: 'info',
 		  subdomain: process.env.LOGGLY_USER,
+		  json: true,
 		  "auth": {
 		      "username": process.env.LOGGLY_USER,
 		      "password": process.env.LOGGLY_PASS
@@ -71,6 +72,7 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	chromosomes[ req.params.chromosome ] = req.params.fitness; // to avoid repeated chromosomes
 	IPs[ req.connection.remoteAddress ]++;
 	logger.info("put", { chromosome: req.params.chromosome,
+			     fitness: parseInt(req.params.fitness),
 			     IP: req.connection.remoteAddress } );
 	res.send( { length : Object.keys(chromosomes).length });
 	if ( app.is_solution( req.params.chromosome, req.params.fitness, app.config.vars.traps, app.config.vars.b ) ) {
@@ -78,6 +80,7 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	    logger.info( "finish", { solution: req.params.chromosome } );
 	    chromosomes = {};
 	    sequence++;
+	    logger.info( { "start": sequence });	    
 	}
     } else {
 	res.send( { length : 0 });
@@ -94,7 +97,7 @@ app.use(function(err, req, res, next){
 // Start listening
 app.listen(app.get('port'), server_ip_address, function() {
     console.log("Node app is running at localhost:" + app.get('port'));
-    logger.info("Start");
+    logger.info( { "start": sequence });
 })
 
 // Exports for tests

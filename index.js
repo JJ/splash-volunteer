@@ -1,6 +1,7 @@
 var express = require('express'),
 app = express(),
 winston = require('winston'),
+loggly = require('winston-loggly'),
 App = require("app.json"); // Used for configuration and by Heroku
 
 
@@ -24,6 +25,18 @@ var logger = new (winston.Logger)({
 	new (winston.transports.File)({ filename: 'nodio.log', level: 'info' })
     ]
 });
+
+if ( process.env.LOGGLY_TOKEN && process.env.LOGGLY_PASS && process.env.LOGGLY_USER) {
+    logger.add( winston.transports.Loggly, 
+		{ inputToken: process.env.LOGGLY_TOKEN ,
+		  level: 'info',
+		  subdomain: process.env.LOGGLY_USER,
+		  "auth": {
+		      "username": process.env.LOGGLY_USER,
+		      "password": process.env.LOGGLY_PASS
+		  }
+		} );
+}
 
 var chromosomes = {};
 var IPs = {};
@@ -80,7 +93,8 @@ app.use(function(err, req, res, next){
 
 // Start listening
 app.listen(app.get('port'), server_ip_address, function() {
-    console.log("Node app is running at localhost:" + app.get('port'))
+    console.log("Node app is running at localhost:" + app.get('port'));
+    logger.info("Start");
 })
 
 // Exports for tests

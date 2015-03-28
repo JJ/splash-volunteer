@@ -11,7 +11,8 @@
     "express": "~3.4.x",
     "mocha": "~2.1.x",
     "nodeo": "0.0.5",
-    "winston": "^0.9.0"
+    "winston": "^0.9.0",
+    "winston-irc": "^0.3.4"
   },
   "engines": {
     "node": ">=0.10.x",

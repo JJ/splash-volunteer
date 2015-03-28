@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var nodeo = require('nodeo'),
+var rest = require('restler'),
+nodeo = require('nodeo'),
 trap = nodeo.trap,
 fs = require('fs');
 
@@ -25,6 +26,11 @@ var trapf = new trap.Trap( conf.fitness );
 var eo = new nodeo.Nodeo( { population_size: conf.population_size,
 			    chromosome_size: chromosome_size,
 			    fitness_func: trapf } );
+var url = "http://"+conf.host;
+if ( conf.port ) {
+    url += ":"+conf.port;
+}
+url += "/";
 
 log.push( { start: process.hrtime() } );
 console.log( "Starting ");
@@ -42,6 +48,20 @@ function generation() {
     if ( (eo.fitness_of[eo.population[0]] < traps*conf.fitness.b ) && (generation_count*conf.population_size < conf.max_evaluations )) {
 	console.log( eo.population[0] );
 	setImmediate(generation);
+
+	// get from pool
+	console.log( url + 'random' );
+	rest.get( url + 'random' ).on('complete', function( data ) {
+	    console.log(data );
+	    if ( data.chromosome ) {
+		eo.incorporate( data.chromosome );
+		console.log('Getting ' + data.chromosome );
+	    }
+	});
+
+	// put in pool
+	console.log (url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
+	rest.put( url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
     } else {
 	log.push( {end: { 
 	    time: process.hrtime(),

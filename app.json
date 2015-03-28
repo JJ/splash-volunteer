@@ -5,5 +5,9 @@
     "keywords": ["node", "express", "static", "evolutionary algorithms"],
     "env": {
 	"TARGET_CHROMOSOME": "string"
+    },
+    "vars": {
+	"traps": 40,
+	"b": 2 
     }
 }

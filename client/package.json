@@ -7,8 +7,9 @@
     "start": "node client-ea.js"
   },
   "dependencies": {
-    "nodeo": "0.1.0",
-    "app.json": "~1.2.1"
+    "nodeo": "0.1.1",
+    "app.json": "~1.2.1",
+    "restler": "~3.2.2"
   },
   "engines": {
     "node": ">=0.10.x",

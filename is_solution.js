@@ -1,8 +1,6 @@
 // Checks whether the chromosome is the solution. This function should be set to whatever the user wants. 
 
-var traps = 30
-var b = 2;
-module.exports = exports = function( chromosome, fitness ) {
+module.exports = exports = function( chromosome, fitness, traps, b ) {
     if ( !fitness ) {
 	return false;
     }

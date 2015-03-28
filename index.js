@@ -58,7 +58,10 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 		    chromosome: req.params.chromosome,
 		    IP: req.connection.remoteAddress } );
 	res.send( { length : Object.keys(chromosomes).length });
-	if ( app.is_solution( req.params.chromosome, req.params.fitness ) ) {
+	if ( app.is_solution( req.params.chromosome, req.params.fitness, app.config.vars.traps, app.config.vars.b ) ) {
+	    console.log( "Solution!");
+	    log.push( { put: process.hrtime(),
+			solution: req.params.chromosome } );
 	    chromosomes = {};
 	    sequence++;
 	}

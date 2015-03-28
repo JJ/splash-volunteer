@@ -50,17 +50,13 @@ function generation() {
 	setImmediate(generation);
 
 	// get from pool
-	console.log( url + 'random' );
 	rest.get( url + 'random' ).on('complete', function( data ) {
-	    console.log(data );
 	    if ( data.chromosome ) {
 		eo.incorporate( data.chromosome );
-		console.log('Getting ' + data.chromosome );
 	    }
 	});
 
 	// put in pool
-	console.log (url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
 	rest.put( url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
     } else {
 	log.push( {end: { 

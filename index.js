@@ -18,11 +18,16 @@ app.set('port', (process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5555))
 // set up static dir
 app.use(express.static(__dirname + '/public'))
 
+// set up experimente sequence
+var sequence = 0;
+var temp = new Date();
+var date_str = temp.getFullYear() + "-" + (1 + temp.getMonth()) + "-"+ temp.getDate();
+
 // logger
 var logger = new (winston.Logger)({
     transports: [
 	new (winston.transports.Console)( { level: 'info'} ),
-	new (winston.transports.File)({ filename: 'nodio.log', level: 'info' })
+	new (winston.transports.File)({ filename: 'nodio-'+date_str+ "-" - sequence+'.log', level: 'info' })
     ]
 });
 
@@ -41,7 +46,7 @@ if ( process.env.LOGGLY_TOKEN && process.env.LOGGLY_PASS && process.env.LOGGLY_U
 
 var chromosomes = {};
 var IPs = {};
-var sequence = 0;
+
 
 // Retrieves a random chromosome
 app.get('/random', function(req, res){

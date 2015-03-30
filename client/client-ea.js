@@ -61,11 +61,19 @@ function generation() {
 	    rest.put( url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
 	}
     } else {
-	log.push( {end: { 
-	    time: process.hrtime(),
-	    generation: total_generations,
-	    best : { chromosome : eo.population[0],
-		     fitness : eo.fitness_of[eo.population[0]]}}} );
+	// to force the end of the experiment
+	if ( eo.fitness_of[eo.population[0]] >= traps*conf.fitness.b ) {
+	    rest.put( url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
+	}
+	log.push( {
+	    end: { 
+		time: process.hrtime(),
+		generation: total_generations,
+		best : { chromosome : eo.population[0],
+			 fitness : eo.fitness_of[eo.population[0]]
+		       }
+	    }
+	} );
 	conf.output = conf.output_preffix+".json";
 	fs.writeFileSync(conf.output, JSON.stringify(log));
 	console.log("Finished");

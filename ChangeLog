@@ -1,5 +1,12 @@
 2015-03-31  JJ Merelo  <jmerelo@penny>
 
+	* run-no-restart-server.sh: It takes *longer* to run if the server
+	is not restarted. Probably due to the takeover effect 
+
+	time ./run-no-restart-server.sh > 50runs-norestart.dat
+./run-no-restart-server.sh > 50runs-norestart.dat  1899,95s user 8,02s system 100% cpu 31:44,56 total
+
+
 	* run.sh: First run 
 
 	➜  splash-volunteer git:(master) ✗ time ./run.sh > 50runs.dat 

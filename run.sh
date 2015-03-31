@@ -2,6 +2,6 @@
 
 
 for i in {1..3}; do
-    foreman start web &
-    cd client; ./client-ea.js && killall node 
+    foreman start web & pid=$! && echo $pid
+    ( cd client; ./client-ea.js ) && kill $pid 
 done

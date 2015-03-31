@@ -4,7 +4,6 @@ winston = require('winston'),
 loggly = require('winston-loggly'),
 App = require("app.json"); // Used for configuration and by Heroku
 
-
 // Includes termination condition
 app.is_solution = require("./is_solution.js");
 
@@ -28,7 +27,7 @@ console.log(date_str);
 var logger = new (winston.Logger)({
     transports: [
 	new (winston.transports.Console)( { level: 'info'} ),
-	new (winston.transports.File)({ filename: 'nodio-'+date_str+ "-" + sequence+'.log', level: 'info' })
+	new (winston.transports.File)({ filename: 'log/nodio-'+date_str+ "-" + sequence+'.log', level: 'info' })
     ]
 });
 

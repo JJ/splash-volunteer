@@ -1,0 +1,10 @@
+2015-03-31  JJ Merelo  <jmerelo@penny>
+
+	* run.sh: First run 
+
+	➜  splash-volunteer git:(master) ✗ time ./run.sh > 50runs.dat 
+./run.sh > 50runs.dat  1577,83s user 9,21s system 101% cpu 25:56,56 total
+
+	Now running without restarting.
+
+

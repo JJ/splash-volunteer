@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <script src="js/kube.min.js"></script>
      
+    <!-- for Chart -->
+    <script type="text/javascript" src='js/Chart.min.js'></script>
+
     </head>
     <body>
       <header id='header'>
@@ -23,6 +26,7 @@
       <div class='units-row'>
 	<div class='unit-50'>
 	  <h2><i class="fa fa-bar-chart"></i> How are we doing</h2>
+	  <canvas id="fitness" style='width:95%;height:80%'></canvas>
 	</div>
 	
 	<div class='unit-50'>
@@ -45,6 +49,7 @@
     <footer id="footer">
       <p class='text-centered'>Grab the code and data in <a href='https://github.com/JJ/splash-volunteer'>GitHub</a>. This is free software under the <a href='http://www.gnu.org/licenses/'>Affero GPL license</a>.</p>
     </footer>
+    <script type="text/javascript" src='js/trap.standalone.js'></script>
 
     </body>
     </html>

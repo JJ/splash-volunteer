@@ -29,9 +29,9 @@ function tabify ( x, l, a, b, z ) {
     var Classic = require('../lib/classic.js'),
     trap = require('../lib/trap.js');
     
-    var population_size = 256;
+    var population_size = 512;
     var period = 100;
-    var traps = 30;
+    var traps = 40;
     var trap_len = 4;
     var trap_b =  2;
     var chromosome_size = traps*trap_len;
@@ -46,10 +46,10 @@ function tabify ( x, l, a, b, z ) {
 			    fitness_func: trap_fitness } );
     
     // get line chart canvas
-    var buyers = document.getElementById('fitness').getContext('2d');
+    var fitness = document.getElementById('fitness').getContext('2d');
     
     // Chart data
-    var this_chart = new Chart(buyers);
+    var this_chart = new Chart(fitness);
     var fitness_data = {
         labels : [],
         datasets : [

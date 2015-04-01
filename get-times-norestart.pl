@@ -5,21 +5,46 @@ use warnings;
 
 use v5.14;
 
-use File::Slurp::Tiny qw(read_file);
+use File::Slurp::Tiny qw(read_lines);
 use Time::Piece;
 
 my $file_name = shift || "log/50runs-norestart.dat";
 
-my $file_contents = read_file($file_name);
+my @file_contents = grep(/(Starting|Finished|^\d{2}:\d{2}:\d{2})/, read_lines($file_name) );
 
-die "Nothing in that file $file_name" unless $file_contents;
+die "Nothing in that file $file_name" unless @file_contents;
 
-my @starts = ($file_contents =~/Starting.+?(\d{2}:\d{2}:\d{2})/gs);
-my @ends = ($file_contents =~/(\d{2}:\d{2}:\d{2}).+?Finished/gs);
+my (@starts, @ends);
+for (my $i = 0; $i <= $#file_contents; $i++ ) {
+  if ( $file_contents[$i]=~ /Starting/ )  {
+    my $this_time;
+    if  ($file_contents[$i-1] =~ /(^\d{2}:\d{2}:\d{2})/) {
+      $this_time = $1;
+    } elsif ($file_contents[$i-2] =~ /(^\d{2}:\d{2}:\d{2})/) {
+      $this_time = $1;
+    }
+    push @starts, $this_time;
+  }
+  
+  if ( $file_contents[$i]=~ /Finished/ ) {
+    my $this_time;
+    if  ($file_contents[$i-1] =~ /(^\d{2}:\d{2}:\d{2})/) {
+      $this_time = $1;
+    } elsif ($file_contents[$i+1] =~ /(^\d{2}:\d{2}:\d{2})/) {
+      $this_time = $1;
+    }
+    push @ends, $this_time;
+  }
+
+}
 
 my @durations;
 for (my $i = 0; $i <= $#starts; $i++ ) {
-    push @durations, Time::Piece->strptime( $ends[$i], '%H:%M:%S' ) - 
-	Time::Piece->strptime( $starts[$i], '%H:%M:%S' );
+    my ($start_time) = ($starts[$i] =~ /^(\d+:\d+:\d+)/); 
+    my ($end_time) = ($ends[$i] =~ /^(\d+:\d+:\d+)/); 
+    push @durations, Time::Piece->strptime( $end_time, '%H:%M:%S' ) - 
+	Time::Piece->strptime( $start_time, '%H:%M:%S' );
 }
+
+
 say join("\n",@durations);

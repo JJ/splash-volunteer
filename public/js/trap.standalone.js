@@ -92,7 +92,7 @@ function tabify ( x, l, a, b, z ) {
 
 	    // And puts another one in the pool
 	    $.ajax({ type: 'put',
-		     url: "one/"+eo.population[0].string } );
+		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
 	}
 	
 	if ( eo.population[0].fitness < traps*trap_b ) {

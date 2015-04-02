@@ -91,10 +91,11 @@ function tabify ( x, l, a, b, z ) {
         ]
     };
 
-    var generation_count=1;
+    var generation_count=0;
     
     (function do_ea() {
 	eo.generation();
+	console.log(  eo.population[0] );
 	generation_count++;
 	if ( (generation_count % period === 0) ) {
 	    console.log(generation_count);
@@ -108,7 +109,7 @@ function tabify ( x, l, a, b, z ) {
 	    $.get("/random", function( data ) {
 		if ( data.chromosome ) {
 		    eo.incorporate( data.chromosome );
-		    ('Getting ' + data.chromosome );
+		    console.log('Getting ' + data.chromosome );
 		}
 	    });
 
@@ -127,6 +128,8 @@ function tabify ( x, l, a, b, z ) {
 	if ( eo.population[0].fitness < traps*trap_b ) {
 	    setTimeout(do_ea, 5);
 	} else {
+	    $.ajax({ type: 'put',
+		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
 	    console.log(  eo.population[0] );
 	}
     })();

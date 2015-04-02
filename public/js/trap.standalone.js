@@ -73,7 +73,7 @@ function tabify ( x, l, a, b, z ) {
         ]
     };
 
-    // Chart data
+    // Data for IPs.
     var ips_chart = new Chart(IPs,  { 
 	responsive: true,
 	maintainAspectRatio: true
@@ -91,7 +91,7 @@ function tabify ( x, l, a, b, z ) {
         ]
     };
 
-    var generation_count=0;
+    var generation_count=1;
     
     (function do_ea() {
 	eo.generation();
@@ -108,7 +108,7 @@ function tabify ( x, l, a, b, z ) {
 	    $.get("/random", function( data ) {
 		if ( data.chromosome ) {
 		    eo.incorporate( data.chromosome );
-//		    alert('Getting ' + data.chromosome );
+		    ('Getting ' + data.chromosome );
 		}
 	    });
 

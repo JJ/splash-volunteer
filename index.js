@@ -21,7 +21,6 @@ app.use(express.static(__dirname + '/public'))
 var sequence = 0;
 var temp = new Date();
 var date_str = temp.getFullYear() + "-" + (1 + temp.getMonth()) + "-"+ temp.getDate();
-console.log(date_str);
 
 // logger
 var logger = new (winston.Logger)({
@@ -31,6 +30,7 @@ var logger = new (winston.Logger)({
     ]
 });
 
+// set up loggly logger if it is configured by env variables
 if ( process.env.LOGGLY_TOKEN && process.env.LOGGLY_PASS && process.env.LOGGLY_USER) {
     logger.add( winston.transports.Loggly, 
 		{ inputToken: process.env.LOGGLY_TOKEN ,
@@ -44,6 +44,7 @@ if ( process.env.LOGGLY_TOKEN && process.env.LOGGLY_PASS && process.env.LOGGLY_U
 		} );
 }
 
+// internal variables
 var chromosomes = {};
 var IPs = {};
 
@@ -70,6 +71,12 @@ app.get('/chromosomes', function(req, res){
 app.get('/IPs', function(req, res){
     res.send( IPs );
 });
+
+// Retrieves the sequence number
+app.get('/seq_number', function(req, res){
+    res.send( { "number": sequence} );
+});
+
 
 // Adds one chromosome to the pool, with fitness
 app.put('/one/:chromosome/:fitness', function(req, res){

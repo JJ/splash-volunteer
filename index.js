@@ -22,7 +22,7 @@ var sequence = 0;
 var temp = new Date();
 var date_str = temp.getFullYear() + "-" + (1 + temp.getMonth()) + "-"+ temp.getDate();
 
-// logger
+// create logger to console and file
 var logger = new (winston.Logger)({
     transports: [
 	new (winston.transports.Console)( { level: 'info'} ),
@@ -30,7 +30,7 @@ var logger = new (winston.Logger)({
     ]
 });
 
-// set up loggly logger if it is configured by env variables
+// set up Loggly logger if it is configured by env variables
 if ( process.env.LOGGLY_TOKEN && process.env.LOGGLY_PASS && process.env.LOGGLY_USER) {
     logger.add( winston.transports.Loggly, 
 		{ inputToken: process.env.LOGGLY_TOKEN ,
@@ -75,7 +75,6 @@ app.get('/IPs', function(req, res){
 app.get('/seq_number', function(req, res){
     res.send( { "number": sequence} );
 });
-
 
 // Adds one chromosome to the pool, with fitness
 app.put('/one/:chromosome/:fitness', function(req, res){

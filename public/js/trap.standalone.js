@@ -47,13 +47,14 @@ function tabify ( x, l, a, b, z ) {
     
     // get line chart canvas
     var fitness = document.getElementById('fitness').getContext('2d');
-    console.log( fitness );
-    console.log(document.getElementById('canvas'));
     fitness.canvas.width=document.getElementById('canvas').clientWidth*0.9;
     fitness.canvas.height=document.getElementById('canvas').clientHeight*0.8;
 
-    console.log(fitness.canvas.width);
-    console.log(fitness.canvas.height);
+    // get #IPs chart canvas
+    var IPs = document.getElementById('IPs').getContext('2d');
+    fitness.canvas.width=document.getElementById('ips_canvas').clientWidth*0.9;
+    fitness.canvas.height=document.getElementById('ips_canvas').clientHeight*0.8;
+
     // Chart data
     var this_chart = new Chart(fitness,  { 
 	responsive: true,
@@ -72,6 +73,24 @@ function tabify ( x, l, a, b, z ) {
         ]
     };
 
+    // Chart data
+    var ips_chart = new Chart(IPs,  { 
+	responsive: true,
+	maintainAspectRatio: true
+    });
+    var ips_data = {
+        labels : [],
+        datasets : [
+            {
+                fillColor : "rgba(160,204,182,0.4)",
+                strokeColor : "#ACC26D",
+                pointColor : "#ddd",
+                pointStrokeColor : "#9DB86D",
+                data : []
+            }
+        ]
+    };
+
     var generation_count=0;
     
     (function do_ea() {
@@ -79,9 +98,12 @@ function tabify ( x, l, a, b, z ) {
 	generation_count++;
 	if ( (generation_count % period === 0) ) {
 	    console.log(generation_count);
+	    
+	    // chart fitness
 	    fitness_data.labels.push(generation_count);
 	    fitness_data.datasets[0].data.push(eo.population[0].fitness);
 	    this_chart.Line(fitness_data);
+
 	    // gets a random chromosome from the pool
 	    $.get("/random", function( data ) {
 		if ( data.chromosome ) {
@@ -93,6 +115,11 @@ function tabify ( x, l, a, b, z ) {
 	    // And puts another one in the pool
 	    $.ajax({ type: 'put',
 		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
+
+	    // gets a random chromosome from the pool
+	    $.get("/IPs", function( data ) {
+		console.log( data );
+	    });
 	}
 	
 	if ( eo.population[0].fitness < traps*trap_b ) {

@@ -48,7 +48,6 @@ if ( process.env.LOGGLY_TOKEN && process.env.LOGGLY_PASS && process.env.LOGGLY_U
 var chromosomes = {};
 var IPs = {};
 
-
 // Retrieves a random chromosome
 app.get('/random', function(req, res){
     if (Object.keys(chromosomes ).length > 0) {
@@ -82,7 +81,11 @@ app.get('/seq_number', function(req, res){
 app.put('/one/:chromosome/:fitness', function(req, res){
     if ( req.params.chromosome ) {
 	chromosomes[ req.params.chromosome ] = req.params.fitness; // to avoid repeated chromosomes
-	IPs[ req.connection.remoteAddress ]++;
+	if ( !IPs[ req.connection.remoteAddress ] ) {
+	    IPs[ req.connection.remoteAddress ]=1;
+	} else {
+	    IPs[ req.connection.remoteAddress ]++;
+	}
 	logger.info("put", { chromosome: req.params.chromosome,
 			     fitness: parseInt(req.params.fitness),
 			     IP: req.connection.remoteAddress } );

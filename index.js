@@ -13,7 +13,7 @@ app.config = App.new(__dirname + "/app.json");
 // configure for openshift or heroku
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'; 
 app.set('port', (process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5555))
-
+var log_dir = process.env.OPENSHIFT_DATA_DIR || "log";
 // set up static dir
 app.use(express.static(__dirname + '/public'))
 
@@ -26,7 +26,7 @@ var date_str = temp.getFullYear() + "-" + (1 + temp.getMonth()) + "-"+ temp.getD
 var logger = new (winston.Logger)({
     transports: [
 	new (winston.transports.Console)( { level: 'info'} ),
-	new (winston.transports.File)({ filename: 'log/nodio-'+date_str+ "-" + sequence+'.log', level: 'info' })
+	new (winston.transports.File)({ filename: log_dir+'/nodio-'+date_str+ "-" + sequence+'.log', level: 'info' })
     ]
 });
 

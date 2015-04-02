@@ -53,7 +53,7 @@ function tabify ( x, l, a, b, z ) {
     // get #IPs chart canvas
     var IPs = document.getElementById('IPs').getContext('2d');
     IPs.canvas.width=document.getElementById('ips_canvas').clientWidth*0.9;
-    IPs.canvas.height=document.getElementById('ips_canvas').clientHeight*0.8;
+    IPs.canvas.height=document.getElementById('ips_canvas').clientHeight*0.7;
 
     // Chart data
     var this_chart = new Chart(fitness,  { 

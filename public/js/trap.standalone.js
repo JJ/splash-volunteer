@@ -153,8 +153,9 @@ var Utils = exports;
 Utils.random= function (length){
     var chromosome = '';
     for ( var i = 0; i < length; i++ ){
-	chromosome = chromosome + ((Math.random() >0.5)? "1": "0") ;
+	chromosome = chromosome + ((Math.random() >= 0.5)? "1": "0") ;
     }
+    console.log( chromosome );
     return chromosome;
 };
 

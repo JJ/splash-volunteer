@@ -52,8 +52,8 @@ function tabify ( x, l, a, b, z ) {
 
     // get #IPs chart canvas
     var IPs = document.getElementById('IPs').getContext('2d');
-    fitness.canvas.width=document.getElementById('ips_canvas').clientWidth*0.9;
-    fitness.canvas.height=document.getElementById('ips_canvas').clientHeight*0.8;
+    IPs.canvas.width=document.getElementById('ips_canvas').clientWidth*0.9;
+    IPs.canvas.height=document.getElementById('ips_canvas').clientHeight*0.8;
 
     // Chart data
     var this_chart = new Chart(fitness,  { 
@@ -116,9 +116,11 @@ function tabify ( x, l, a, b, z ) {
 	    $.ajax({ type: 'put',
 		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
 
-	    // gets a random chromosome from the pool
+	    // Tracks the number of IPs
 	    $.get("/IPs", function( data ) {
-		console.log( data );
+		ips_data.labels.push(generation_count);
+		ips_data.datasets[0].data.push( Object.keys( data ).length );
+		ips_chart.Line(ips_data);
 	    });
 	}
 	

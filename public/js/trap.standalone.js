@@ -1,5 +1,5 @@
 function tabify ( x, l, a, b, z ) {
-    var tab = "<table style='border:1px solid black;padding:0;margin:0'><tr>";
+    var tab = "<table style='border:1px solid black;padding:0;margin:0;width:100%'><tr>";
     for ( var i = 0; i < x.length; i+=4 ) {
 	tab += "<td style='background-color:";
 	var this_substr = x.substr(  i, l );
@@ -14,7 +14,7 @@ function tabify ( x, l, a, b, z ) {
 	  this_result = b*(num_ones -z)/(l-z);
 	}
 	
-	var colors=['white','lightgray','darkgray','black'];
+	var colors=['white','lightgray','darkgray','darkslategray','black'];
 	tab += colors[this_result*2]+"'> </td>";
     }
     tab += "</tr></table>";
@@ -92,10 +92,10 @@ function tabify ( x, l, a, b, z ) {
     };
 
     var generation_count=0;
-    
+    var best_div = document.getElementById('best');
     (function do_ea() {
 	eo.generation();
-	console.log(  eo.population[0] );
+	best_div.innerHTML=tabify( eo.population[0].string, trap_len,1, trap_b, trap_len -1 );
 	generation_count++;
 	if ( (generation_count % period === 0) ) {
 	    console.log(generation_count);

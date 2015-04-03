@@ -29,7 +29,7 @@ function tabify ( x, l, a, b, z ) {
     var Classic = require('../lib/classic.js'),
     trap = require('../lib/trap.js');
     
-    var population_size = 512;
+    var population_size = 128;
     var period = 100;
     var traps = 40;
     var trap_len = 4;

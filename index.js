@@ -89,7 +89,6 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	if ( ! process.env.OPENSHIFT_NODEJS_IP ) { // this is not openshift
 	    client_ip = req.connection.remoteAddress;
 	} else {
-	    console.log( req.headers );
 	    client_ip = req.headers['x-forwarded-for'];
 	}
 

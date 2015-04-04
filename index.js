@@ -85,14 +85,23 @@ app.get('/seq_number', function(req, res){
 app.put('/one/:chromosome/:fitness', function(req, res){
     if ( req.params.chromosome ) {
 	chromosomes[ req.params.chromosome ] = req.params.fitness; // to avoid repeated chromosomes
-	if ( !IPs[ req.connection.remoteAddress ] ) {
-	    IPs[ req.connection.remoteAddress ]=1;
+	var client_ip;
+	if ( ! process.env.OPENSHIFT_NODEJS_IP ) { // this is not openshift
+	    client_ip = req.connection.remoteAddress;
 	} else {
-	    IPs[ req.connection.remoteAddress ]++;
+	    console.log( req.headers );
+	    client_ip = req.headers['x-forwarded-for'];
 	}
+
+	if ( !IPs[ client_ip ] ) {
+	    IPs[ client_ip ]=1;
+	} else {
+	    IPs[ client_ip ]++;
+	}
+
 	logger.info("put", { chromosome: req.params.chromosome,
 			     fitness: parseInt(req.params.fitness),
-			     IP: req.connection.remoteAddress } );
+			     IP: client_ip } );
 	res.send( { length : Object.keys(chromosomes).length });
 	if ( app.is_solution( req.params.chromosome, req.params.fitness, app.config.vars.traps, app.config.vars.b ) ) {
 	    console.log( "Solution!");

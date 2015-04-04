@@ -1,4 +1,5 @@
-var express = require('express'),
+var fs = require('fs'),
+express = require('express'),
 app = express(),
 winston = require('winston'),
 loggly = require('winston-loggly'),

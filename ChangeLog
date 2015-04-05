@@ -1,0 +1,6 @@
+2015-03-28  Juan J. merelo  <jmerelo@penny>
+
+	* index.js (App): IRC does not work because it sends too many
+	messages. Bails out with "Excess flood". Besides, only the
+	simplest information is sent.
+

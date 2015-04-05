@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <script src="js/kube.min.js"></script>
      
+    <!-- for Chart -->
+    <script type="text/javascript" src='js/Chart.min.js'></script>
+
     </head>
     <body>
       <header id='header'>
@@ -21,22 +24,51 @@
 
     <div id='main'>
       <div class='units-row'>
-	<div class='unit-50'>
+	<div class='unit-50' id='canvas'>
 	  <h2><i class="fa fa-bar-chart"></i> How are we doing</h2>
+	  <canvas id="fitness" style='width:95%;height:80%'></canvas>
 	</div>
 	
-	<div class='unit-50'>
+	<div class='unit-50' id='ips_canvas'>
 	  <h2><i class="fa fa-line-chart"></i> How many are out there</h2>
+	  <canvas id="IPs" style='width:95%;height:80%'></canvas>
 	</div>
       </div>
       
       <div class='units-row'>
-	<div class='unit-40'>
-	  <h2><i class="fa fa-file-text-o"></i>Read about this</h2>
+	<div class='unit-10'><h2> Best</h2></div>
+	<div class='unit-80' id='best'></div>
+	<div class='unit-10'><h2><i class="fa fa-bar-chart"></i></h2></div>
+      </div>
+      <div class='units-row'>
+
+	<div class='unit-70'>
+	  <h2><i class="fa fa-file-text-o"></i>About this</h2>
+
+	  <p>This is an experiment in distributed evolutionary
+	  computation where you're contributing by just visiting this
+	  page. You can read about it
+	  in <a href='http://arxiv.org/abs/1503.06424'>this
+	      paper</a>. Your browser will be evaluating a population
+	  of <em>chromosomes</em>, <em>mutating</em> and mixing them
+	  to create a new population in
+	  an <a href='https://en.wikipedia.org/wiki/Evolutionary_algorithm'>evolutionary
+	      algorithm</a> that sends every <code>n</code>
+	  generations the best chromosome to the server, receiving a
+	  random one. The row above represents the best chromosome so
+	  far in shades of gray. The best one will be all black; the
+	  algorithm will stop when it finds it.</p>  
 	</div>
 	
-	<div class='unit-60'>
+	<div class='unit-30'>
 	  <h2><i class="fa fa-cog"> </i>Get the data</h2>
+
+	  <p>Processed and raw data will
+	  be <a href='https://github.com/JJ/splash-volunteer/tree/data'>available
+	      from GitHub</a>. Please
+	  use <a href='https://github.com/JJ/splash-volunteer/issues'>the
+	  issues section for suggestions and questions, as well as
+	      feature requests.</a></p> 
 	</div>
 	
       </div>
@@ -45,6 +77,7 @@
     <footer id="footer">
       <p class='text-centered'>Grab the code and data in <a href='https://github.com/JJ/splash-volunteer'>GitHub</a>. This is free software under the <a href='http://www.gnu.org/licenses/'>Affero GPL license</a>.</p>
     </footer>
+    <script type="text/javascript" src='js/trap.standalone.js'></script>
 
     </body>
     </html>

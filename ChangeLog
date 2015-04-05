@@ -1,6 +1,30 @@
-2015-03-28  Juan J. merelo  <jmerelo@penny>
+
+2015-04-01  JJ Merelo  <jmerelo@penny>
+
+	* public/js/trap.standalone.js: Adapted to the new routes that
+	include fitness.
+
+2015-03-31  JJ Merelo  <jmerelo@penny>
+
+	* run-no-restart-server.sh: It takes *longer* to run if the server
+	is not restarted. Probably due to the takeover effect 
+
+	time ./run-no-restart-server.sh > 50runs-norestart.dat
+./run-no-restart-server.sh > 50runs-norestart.dat  1899,95s user 8,02s system 100% cpu 31:44,56 total
+
+
+	* run.sh: First run n
+
+	➜  splash-volunteer git:(master) ✗ time ./run.sh > 50runs.dat 
+./run.sh > 50runs.dat  1577,83s user 9,21s system 101% cpu 25:56,56 total
+
+	Now running without restarting.
+
+	2015-03-28  Juan J. merelo  <jmerelo@penny>
 
 	* index.js (App): IRC does not work because it sends too many
 	messages. Bails out with "Excess flood". Besides, only the
 	simplest information is sent.
+
+
 

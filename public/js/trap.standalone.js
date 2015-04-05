@@ -1,5 +1,5 @@
 function tabify ( x, l, a, b, z ) {
-    var tab = "<table style='border:1px solid black;padding:0;margin:0'><tr>";
+    var tab = "<table style='border:1px solid black;padding:0;margin:0;width:100%'><tr>";
     for ( var i = 0; i < x.length; i+=4 ) {
 	tab += "<td style='background-color:";
 	var this_substr = x.substr(  i, l );
@@ -14,7 +14,7 @@ function tabify ( x, l, a, b, z ) {
 	  this_result = b*(num_ones -z)/(l-z);
 	}
 	
-	var colors=['white','lightgray','darkgray','black'];
+	var colors=['white','lightgray','darkgray','darkslategray','black'];
 	tab += colors[this_result*2]+"'> </td>";
     }
     tab += "</tr></table>";
@@ -29,9 +29,9 @@ function tabify ( x, l, a, b, z ) {
     var Classic = require('../lib/classic.js'),
     trap = require('../lib/trap.js');
     
-    var population_size = 256;
+    var population_size = 128;
     var period = 100;
-    var traps = 30;
+    var traps = 40;
     var trap_len = 4;
     var trap_b =  2;
     var chromosome_size = traps*trap_len;
@@ -46,10 +46,20 @@ function tabify ( x, l, a, b, z ) {
 			    fitness_func: trap_fitness } );
     
     // get line chart canvas
-    var buyers = document.getElementById('fitness').getContext('2d');
-    
+    var fitness = document.getElementById('fitness').getContext('2d');
+    fitness.canvas.width=document.getElementById('canvas').clientWidth*0.9;
+    fitness.canvas.height=document.getElementById('canvas').clientHeight*0.8;
+
+    // get #IPs chart canvas
+    var IPs = document.getElementById('IPs').getContext('2d');
+    IPs.canvas.width=document.getElementById('ips_canvas').clientWidth*0.9;
+    IPs.canvas.height=document.getElementById('ips_canvas').clientHeight*0.7;
+
     // Chart data
-    var this_chart = new Chart(buyers);
+    var this_chart = new Chart(fitness,  { 
+	responsive: true,
+	maintainAspectRatio: true
+    });
     var fitness_data = {
         labels : [],
         datasets : [
@@ -63,32 +73,63 @@ function tabify ( x, l, a, b, z ) {
         ]
     };
 
+    // Data for IPs.
+    var ips_chart = new Chart(IPs,  { 
+	responsive: true,
+	maintainAspectRatio: true
+    });
+    var ips_data = {
+        labels : [],
+        datasets : [
+            {
+                fillColor : "rgba(160,204,182,0.4)",
+                strokeColor : "#ACC26D",
+                pointColor : "#ddd",
+                pointStrokeColor : "#9DB86D",
+                data : []
+            }
+        ]
+    };
+
     var generation_count=0;
-    
+    var best_div = document.getElementById('best');
     (function do_ea() {
 	eo.generation();
+	best_div.innerHTML=tabify( eo.population[0].string, trap_len,1, trap_b, trap_len -1 );
 	generation_count++;
 	if ( (generation_count % period === 0) ) {
 	    console.log(generation_count);
+	    
+	    // chart fitness
 	    fitness_data.labels.push(generation_count);
 	    fitness_data.datasets[0].data.push(eo.population[0].fitness);
 	    this_chart.Line(fitness_data);
+
 	    // gets a random chromosome from the pool
 	    $.get("/random", function( data ) {
 		if ( data.chromosome ) {
 		    eo.incorporate( data.chromosome );
-//		    alert('Getting ' + data.chromosome );
+		    console.log('Getting ' + data.chromosome );
 		}
 	    });
 
 	    // And puts another one in the pool
 	    $.ajax({ type: 'put',
-		     url: "one/"+eo.population[0].string } );
+		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
+
+	    // Tracks the number of IPs
+	    $.get("/IPs", function( data ) {
+		ips_data.labels.push(generation_count);
+		ips_data.datasets[0].data.push( Object.keys( data ).length );
+		ips_chart.Line(ips_data);
+	    });
 	}
 	
 	if ( eo.population[0].fitness < traps*trap_b ) {
 	    setTimeout(do_ea, 5);
 	} else {
+	    $.ajax({ type: 'put',
+		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
 	    console.log(  eo.population[0] );
 	}
     })();
@@ -115,8 +156,9 @@ var Utils = exports;
 Utils.random= function (length){
     var chromosome = '';
     for ( var i = 0; i < length; i++ ){
-	chromosome = chromosome + ((Math.random() >0.5)? "1": "0") ;
+	chromosome = chromosome + ((Math.random() >= 0.5)? "1": "0") ;
     }
+    console.log( chromosome );
     return chromosome;
 };
 

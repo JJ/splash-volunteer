@@ -40,7 +40,7 @@ describe( "Puts and returns chromosome", function() {
 		done();
 	    });
     });
-    it('should return chromosomes', function (done) {
+    it('should return all chromosomes', function (done) {
 	request(app)
 	    .get('/chromosomes')
 	    .expect('Content-Type', /json/)
@@ -63,6 +63,20 @@ describe( "Puts and returns chromosome", function() {
 		    return done( error );
 		}
 		resultado.body.should.be.instanceof(Object);
+		done();
+	    });
+    });
+    
+    it('should return sequence number', function (done) {
+	request(app)
+	    .get('/seq_number')
+	    .expect('Content-Type', /json/)
+	    .expect(200)
+	    .end( function ( error, resultado ) {
+		if ( error ) {
+		    return done( error );
+		}
+		resultado.body.should.have.property("number",0);
 		done();
 	    });
     });

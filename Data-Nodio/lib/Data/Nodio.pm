@@ -7,7 +7,7 @@ use Carp;
 use version; our $VERSION = qv('0.0.3');
 
 use File::Slurp::Tiny qw(read_lines);
-
+use JSON;
 
 # Module implementation here
 sub new {
@@ -16,14 +16,31 @@ sub new {
   my @file_contents = read_lines($file_name);
 
   carp "Nothing in that file $file_name" unless @file_contents;
-  my $self = { _data => \@file_contents};
+  my $self = { _data_strings => \@file_contents};
   bless $self, $class;
   return $self;
 }
 
+sub log {
+  my $self = shift;
+  return @{$self->{'_data_strings'}};
+}
+
+sub _to_data {
+  my $self = shift;
+  $self->{'_data'} = [];
+  for my $data (@{$self->{'_data_strings'}} ) {
+    push @{$self->{'_data'}}, decode_json $data;
+  }
+
+}
+
 sub data {
   my $self = shift;
-  return @{$self->{'_data'}};
+  if ( !$self->{'_data'} ) {
+    $self->_to_data();
+  }
+  return $self->{'_data'};
 }
 
 1; # Magic true value required at end of module
@@ -48,10 +65,17 @@ This document describes Data::Nodio version 0.0.3
 
 =head1 INTERFACE 
 
-=nead2 new( [$file_name = "log/nodio-2015-4-4-0.log" )
+=head2 new( [$file_name = "log/nodio-2015-4-4-0.log" )
 
 Creates an object with the data. No process, leaving it for latter implementation.
 
+=head2 log()
+
+Returns an array with the original data strings
+
+=head2 data()
+
+Returns an arrayref with the processed data
 
 =head1 AUTHOR
 

@@ -8,6 +8,7 @@ use version; our $VERSION = qv('0.0.3');
 
 use File::Slurp::Tiny qw(read_lines);
 use JSON;
+use DateTime::Format::RFC3339;
 
 # Module implementation here
 sub new {
@@ -43,6 +44,38 @@ sub data {
   return $self->{'_data'};
 }
 
+sub runs {
+  my $self = shift;
+  if ( !$self->{'_data'} ) {
+    $self->_to_data();
+  }
+  if ( !$self->{'_runs'} ) {
+    my @runs;
+    my $format = DateTime::Format::RFC3339->new();
+    my $current_run;
+    for my $data ( @{$self->{'_data'}} ) {
+      if (exists $data->{'start'} ) {
+	$current_run = {};
+	$current_run->{'start_time'} = $format->parse_datetime( $data->{'timestamp'} );
+	push @runs, $current_run;
+      }
+      
+      if ($data->{'chromosome'} ) {
+	push @{$current_run->{'puts'}{$data->{'IP'}}}, $format->parse_datetime( $data->{'timestamp'} );
+      }
+      
+      if ($data->{'message'} eq 'finish' ) {
+	$current_run->{'end_time'} = $format->parse_datetime( $data->{'timestamp'} );
+      }
+    }
+    $self->{'_runs'} = \@runs;
+  }
+  return $self->{'_runs'};
+    
+
+}
+
+
 1; # Magic true value required at end of module
 __END__
 
@@ -73,9 +106,13 @@ Creates an object with the data. No process, leaving it for latter implementatio
 
 Returns an array with the original data strings
 
-=head2 data()
+3=head2 data()
 
 Returns an arrayref with the processed data
+
+=head2 runs()
+
+Returns an array ref with the log divided by runs
 
 =head1 AUTHOR
 

@@ -12,5 +12,6 @@ ok( @{$data->{'_data_strings'}}, "Data" );
 ok( $data->{'_data_strings'}[0] eq ($data->log())[0], "Data array" );
 is( ref $data->data(), 'ARRAY', "Processed data" );
 is( ref $data->data()->[0], 'HASH', "Processed data" );
-
+is( ref $data->runs, 'ARRAY', "Runs" );
+is( ref $data->runs()->[0], 'HASH', "Runs" );
 done_testing();

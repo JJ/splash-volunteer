@@ -27,7 +27,9 @@ while (@brackets ) {
       my $end = shift @brackets;
       my $contents_end = decode_json $end;
       
-      push @times, ($format->parse_datetime( $contents_end->{'timestamp'} ) - $format->parse_datetime( $contents_start->{'timestamp'} ))->nanoseconds/1e6;
+      my $duration = $format->parse_datetime( $contents_end->{'timestamp'} ) 
+	- $format->parse_datetime( $contents_start->{'timestamp'} );
+      push @times, $duration->in_units('minutes')*60000+$duration->in_units('nanoseconds')/1e6; #milliseconds
     }
 }
 

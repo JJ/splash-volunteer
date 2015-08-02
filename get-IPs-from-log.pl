@@ -28,7 +28,8 @@ while (@brackets ) {
     my %these_IPs;
     while ( $this_IP !~ /solution/ ) {
       my $msg_start = decode_json $this_IP;
-      $these_IPs{ $msg_start->{'worker_uuid'} }++;
+      my $this_ID = $msg_start->{'worker_uuid'}?$msg_start->{'worker_uuid'}:$msg_start->{'IP'};
+      $these_IPs{ $this_ID }++;
       last if !@brackets;
       $this_IP = shift @brackets;
     }

@@ -25,6 +25,7 @@ while (@brackets ) {
 
     last if !@brackets;
     my $this_IP = shift @brackets;
+    next if $this_IP =~ /start/;
     my %these_IPs;
     while ( $this_IP !~ /solution/ ) {
       my $msg_start = decode_json $this_IP;

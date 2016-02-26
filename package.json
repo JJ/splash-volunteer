@@ -1,6 +1,6 @@
 {
   "name": "Nodio",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A backend for evolutionary algorithms running on the client",
   "main": "index.js",
   "scripts": {
@@ -11,10 +11,8 @@
     "app.json": "~1.2.1",
     "express": "~3.4.x",
     "leroux-cache": "^0.1.1",
-    "mocha": "~2.1.x",
     "nodeo": "0.0.5",
-    "winston": "^0.9.0",
-    "winston-irc": "^0.3.4"
+    "winston": "^0.9.0"
   },
   "engines": {
     "node": ">=0.10.x",
@@ -31,14 +29,15 @@
     "node.js",
     "express"
   ],
-  "author": "Mark Pundsack modified by JJ Merelo",
+  "author": "JJ Merelo after example by Mark Pundsack",
   "contributors": [
     "Zeke Sikelianos <zeke@sikelianos.com> (http://zeke.sikelianos.com)",
     "JJ Merelo <jjmerelo@gmail.com> (http://jj.github.io)"
   ],
   "license": "MIT",
   "devDependencies": {
-    "supertest": "~0.15.0",
-    "should": "~4.6.2"
+      "mocha": "~2.1.x",
+      "supertest": "~0.15.0",
+      "should": "~4.6.2"
   }
 }

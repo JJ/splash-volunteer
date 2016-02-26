@@ -1,6 +1,8 @@
 var request = require('supertest'), 
 should = require('should'),
 app = require('../index.js'),
+nodeo = require('nodeo'),
+utils = nodeo.utils,
 one_chromosome = { "string": "101101101101",
 		   "fitness": 0 },
 great_chromosome = { "string": "whatever",
@@ -80,4 +82,39 @@ describe( "Puts and returns chromosome", function() {
 		done();
 	    });
     });
+    
 });
+
+describe( "Stress-tests cache", function() {
+    it('Should include many requests correctly', function (done) {
+	for ( var i = 0; i < 200; i ++ ) {
+	    var chromosome = utils.random( 16 ),
+	    fitness = utils.max_ones( chromosome );
+	    request(app)
+		.put('/one/'+chromosome+"/"+fitness)
+		.expect('Content-Type', /json/)
+	    .end(function (err, result) {
+		result.body.should.have.property('length');
+	    });
+	}
+	done();
+
+    });
+
+    it('should return all chromosomes', function (done) {
+	request(app)
+	    .get('/chromosomes')
+	    .expect('Content-Type', /json/)
+	    .expect(200)
+	    .end( function ( error, resultado ) {
+		if ( error ) {
+		    return done( error );
+		}
+		resultado.body.should.be.instanceof(Object);
+		console.log(Object.keys(resultado.body).length);
+		Object.keys(resultado.body).length.should.be.equal( 128 );
+		done();
+	    });
+    });
+});
+    

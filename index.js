@@ -36,7 +36,7 @@ var logger = new (winston.Logger)({
 });
 
 // internal variables
-var cache = leroux({maxSize: app.config.vars.cache_size || 128});
+var cache = leroux({sweepDelay: 200, maxSize: app.config.vars.cache_size || 128});
 var IPs = {};
 
 // Retrieves a random chromosome
@@ -81,6 +81,7 @@ app.get('/seq_number', function(req, res){
 app.put('/one/:chromosome/:fitness', function(req, res){
     if ( req.params.chromosome ) {
 	cache.set( req.params.chromosome, req.params.fitness); // to avoid repeated chromosomes
+//	console.log( "Caching "+req.params.chromosome + " " + req.params.fitness );
 	var client_ip;
 	if ( ! process.env.OPENSHIFT_NODEJS_IP ) { // this is not openshift
 	    client_ip = req.connection.remoteAddress;
@@ -101,7 +102,7 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	if ( app.is_solution( req.params.chromosome, req.params.fitness, app.config.vars.traps, app.config.vars.b ) ) {
 	    console.log( "Solution!");
 	    logger.info( "finish", { solution: req.params.chromosome } );
-	    cache = leroux({maxSize: config.vars.cache_size || 128});;
+	    cache = leroux({sweepDelay: 200, maxSize: config.vars.cache_size || 128});;
 	    sequence++;
 	    logger.info( { "start": sequence });	    
 	}

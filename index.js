@@ -2,7 +2,7 @@ var fs = require('fs'),
 express = require('express'),
 app = express(),
 winston = require('winston'),
-loggly = require('winston-loggly'),
+leroux = require('leroux-cache'),
 App = require("app.json"); // Used for configuration and by Heroku
 
 // Includes termination condition
@@ -36,15 +36,21 @@ var logger = new (winston.Logger)({
 });
 
 // internal variables
-var chromosomes = {};
+var cache = leroux({maxSize: app.config.vars.cache_size || 128});
 var IPs = {};
 
 // Retrieves a random chromosome
 app.get('/random', function(req, res){
-    if (Object.keys(chromosomes ).length > 0) {
-	var keys = Object.keys(chromosomes );
-	var one = keys[ Math.floor(keys.length*Math.random())];
-	res.send( { 'chromosome': one } );
+    if (cache.size > 0) {
+	var probability = 1/cache.size;
+	var random_chromosome;
+	cache.forEach( function( value, key, cache ) {
+	    console.log(value,key);
+	    if ( !random_chromosome && Math.random() < probability ) {
+		random_chromosome = key;
+	    }
+	});
+	res.send( { 'chromosome': random_chromosome } );
 	logger.info('get');
     } else {
 	res.status(404).send('No chromosomes yet');
@@ -54,6 +60,10 @@ app.get('/random', function(req, res){
 
 // Retrieves the whole chromosome pool
 app.get('/chromosomes', function(req, res){
+    var chromosomes = {};
+    cache.forEach( function( value, key, cache ) {
+	chromosomes[key]=value;
+    });
     res.send( chromosomes );
 });
 
@@ -70,7 +80,7 @@ app.get('/seq_number', function(req, res){
 // Adds one chromosome to the pool, with fitness
 app.put('/one/:chromosome/:fitness', function(req, res){
     if ( req.params.chromosome ) {
-	chromosomes[ req.params.chromosome ] = req.params.fitness; // to avoid repeated chromosomes
+	cache.set( req.params.chromosome, req.params.fitness); // to avoid repeated chromosomes
 	var client_ip;
 	if ( ! process.env.OPENSHIFT_NODEJS_IP ) { // this is not openshift
 	    client_ip = req.connection.remoteAddress;
@@ -87,11 +97,11 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	logger.info("put", { chromosome: req.params.chromosome,
 			     fitness: parseInt(req.params.fitness),
 			     IP: client_ip } );
-	res.send( { length : Object.keys(chromosomes).length });
+	res.send( { length : cache.size });
 	if ( app.is_solution( req.params.chromosome, req.params.fitness, app.config.vars.traps, app.config.vars.b ) ) {
 	    console.log( "Solution!");
 	    logger.info( "finish", { solution: req.params.chromosome } );
-	    chromosomes = {};
+	    cache = leroux({maxSize: config.vars.cache_size || 128});;
 	    sequence++;
 	    logger.info( { "start": sequence });	    
 	}

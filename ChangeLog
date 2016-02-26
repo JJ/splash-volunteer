@@ -1,3 +1,7 @@
+2016-02-26  Juan J. merelo  <jmerelo@penny>
+
+	* package.json: This will change the data store to a finite cache
+	that uses leroux-cache, already installed.
 
 2015-04-01  JJ Merelo  <jmerelo@penny>
 

@@ -8,6 +8,7 @@
     },
     "vars": {
 	"traps": 40,
-	"b": 2 
+	"b": 2,
+	"cache_size" : 128
     }
 }

@@ -35,20 +35,6 @@ var logger = new (winston.Logger)({
     ]
 });
 
-// set up Loggly logger if it is configured by env variables
-if ( process.env.LOGGLY_TOKEN && process.env.LOGGLY_PASS && process.env.LOGGLY_USER) {
-    logger.add( winston.transports.Loggly, 
-		{ inputToken: process.env.LOGGLY_TOKEN ,
-		  level: 'info',
-		  subdomain: process.env.LOGGLY_USER,
-		  json: true,
-		  "auth": {
-		      "username": process.env.LOGGLY_USER,
-		      "password": process.env.LOGGLY_PASS
-		  }
-		} );
-}
-
 // internal variables
 var chromosomes = {};
 var IPs = {};

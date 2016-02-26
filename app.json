@@ -7,7 +7,7 @@
 	"TARGET_CHROMOSOME": "string"
     },
     "vars": {
-	"traps": 40,
+	"traps": 50,
 	"b": 2,
 	"cache_size" : 128
     }

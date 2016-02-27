@@ -8,9 +8,15 @@ one_chromosome = { "string": "101101101101",
 great_chromosome = { "string": "whatever",
 		     "fitness": 60 };
 
+
+
 describe( "Loads configuration correctly", function() {
     it('Should set repo correctly', function( done ) {
 	app.config.should.have.property('repository', "https://github.com/JJ/splash-volunteer");
+	done();
+    });
+    it('Should have loaded config info correctly', function( done ) {
+	app.config['vars'].should.have.property('traps',50);
 	done();
     });
 });
@@ -111,10 +117,25 @@ describe( "Stress-tests cache", function() {
 		    return done( error );
 		}
 		resultado.body.should.be.instanceof(Object);
-		console.log(Object.keys(resultado.body).length);
-		Object.keys(resultado.body).length.should.be.equal( 128 );
+//		console.log(Object.keys(resultado.body).length);
+		Object.keys(resultado.body).length.should.be.above( app.config.vars.cache_size -1 );
+		done();
+	    });
+    });
+
+    
+});
+    
+describe( "Check restart", function() {
+    it('Should find the winner', function (done) {
+	var fitness = app.config.vars.traps*4;
+	var chromosome="1".repeat(fitness);
+	request(app)
+	    .put('/one/'+chromosome+"/"+fitness).expect('Content-Type', /json/)
+	    .expect(200)
+	    .end( function ( error, result ) {
+		result.body.should.have.property('length',0);
 		done();
 	    });
     });
 });
-    

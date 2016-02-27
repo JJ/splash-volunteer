@@ -45,7 +45,6 @@ app.get('/random', function(req, res){
 	var probability = 1/cache.size;
 	var random_chromosome;
 	cache.forEach( function( value, key, cache ) {
-	    console.log(value,key);
 	    if ( !random_chromosome && Math.random() < probability ) {
 		random_chromosome = key;
 	    }
@@ -98,14 +97,14 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	logger.info("put", { chromosome: req.params.chromosome,
 			     fitness: parseInt(req.params.fitness),
 			     IP: client_ip } );
-	res.send( { length : cache.size });
 	if ( app.is_solution( req.params.chromosome, req.params.fitness, app.config.vars.traps, app.config.vars.b ) ) {
 	    console.log( "Solution!");
 	    logger.info( "finish", { solution: req.params.chromosome } );
-	    cache = leroux({sweepDelay: 200, maxSize: config.vars.cache_size || 128});;
+	    cache = leroux({sweepDelay: 200, maxSize: app.config.vars.cache_size || 128});;
 	    sequence++;
 	    logger.info( { "start": sequence });	    
 	}
+	res.send( { length : cache.size });
     } else {
 	res.send( { length : 0 });
     }

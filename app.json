@@ -9,6 +9,6 @@
     "vars": {
 	"traps": 50,
 	"b": 2,
-	"cache_size" : 128
+	"cache_size" : 64
     }
 }

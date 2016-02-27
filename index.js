@@ -95,8 +95,9 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	}
 
 	logger.info("put", { chromosome: req.params.chromosome,
-			     fitness: parseInt(req.params.fitness),
-			     IP: client_ip } );
+			     fitness: parseFloat(req.params.fitness),
+			     IP: client_ip,
+			     cache_size: cache.size } );
 	if ( app.is_solution( req.params.chromosome, req.params.fitness, app.config.vars.traps, app.config.vars.b ) ) {
 	    console.log( "Solution!");
 	    logger.info( "finish", { solution: req.params.chromosome } );

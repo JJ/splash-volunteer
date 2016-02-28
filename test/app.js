@@ -91,6 +91,27 @@ describe( "Puts and returns chromosome", function() {
     
 });
 
+describe( "Test IP cache", function() {
+    it('Should update only if not repeated', function (done) {
+	var chromosome = utils.random( 16 ),
+	fitness = utils.max_ones( chromosome );
+	request(app)
+	    .put('/one/'+chromosome+"/"+fitness)
+	    .expect('Content-Type', /json/)
+	    .end(function (err, result) {
+		result.body.should.have.property('updated',true);
+	    });
+	request(app)
+	    .put('/one/'+chromosome+"/"+fitness)
+	    .expect('Content-Type', /json/)
+	    .end(function (err, result) {
+		result.body.should.have.property('updated',false);
+	    });
+	done();
+
+    });
+});
+
 describe( "Stress-tests cache", function() {
     it('Should include many requests correctly', function (done) {
 	for ( var i = 0; i < 200; i ++ ) {

@@ -1,6 +1,9 @@
 function tabify ( x, l, a, b, z ) {
     var tab = "<table style='border:1px solid black;padding:0;margin:0;width:100%'><tr>";
     for ( var i = 0; i < x.length; i+=4 ) {
+	if ( i % 40 === 0 ) {
+	    tab +="</tr><tr>\n";
+	}
 	tab += "<td style='background-color:";
 	var this_substr = x.substr(  i, l );
 	var num_ones = 0;

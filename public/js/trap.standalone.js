@@ -73,7 +73,7 @@ function tabify ( x, l, a, b, z ) {
         ]
     };
     var this_chart = new Chart(fitness).Line(fitness_data,  { 
-	responsive: false,
+	responsive: true,
 	maintainAspectRatio: true
     });
     
@@ -103,13 +103,13 @@ function tabify ( x, l, a, b, z ) {
 	best_div.innerHTML=tabify( eo.population[0].string, trap_len,1, trap_b, trap_len -1 );
 	generation_count++;
 	if ( (generation_count % period === 0) ) {
-	    console.log(generation_count);
+//	    console.log(generation_count);
 	    
 	    // chart fitness
 	    if ( fitness_data.labels.length > chart_size ) {
 		this_chart.removeData();
 	    }
-	    console.log(this_chart);
+//	    console.log(this_chart);
 	    this_chart.addData([eo.population[0].fitness], generation_count);
             this_chart.update();
 	    // fitness_data.labels.push(generation_count);

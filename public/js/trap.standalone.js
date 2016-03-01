@@ -59,10 +59,7 @@ function tabify ( x, l, a, b, z ) {
     IPs.canvas.height=document.getElementById('ips_canvas').clientHeight*0.7;
 
     // Chart data
-    var this_chart = new Chart(fitness,  { 
-	responsive: true,
-	maintainAspectRatio: true
-    });
+    var chart_size = 50;
     var fitness_data = {
         labels : [],
         datasets : [
@@ -75,6 +72,11 @@ function tabify ( x, l, a, b, z ) {
             }
         ]
     };
+    var this_chart = new Chart(fitness).Line(fitness_data,  { 
+	responsive: false,
+	maintainAspectRatio: true
+    });
+    
 
     // Data for IPs.
     var ips_chart = new Chart(IPs,  { 
@@ -104,9 +106,15 @@ function tabify ( x, l, a, b, z ) {
 	    console.log(generation_count);
 	    
 	    // chart fitness
-	    fitness_data.labels.push(generation_count);
-	    fitness_data.datasets[0].data.push(eo.population[0].fitness);
-	    this_chart.Line(fitness_data);
+	    if ( fitness_data.labels.length > chart_size ) {
+		this_chart.removeData();
+	    }
+	    console.log(this_chart);
+	    this_chart.addData([eo.population[0].fitness], generation_count);
+            this_chart.update();
+	    // fitness_data.labels.push(generation_count);
+	    // fitness_data.datasets[0].data.push(eo.population[0].fitness);
+	    // this_chart.Line(fitness_data);
 
 	    // gets a random chromosome from the pool
 	    $.get("/random", function( data ) {

@@ -73,21 +73,17 @@ function tabify ( x, l, a, b, z ) {
         ]
     };
     var this_chart = new Chart(fitness).Line(fitness_data,  { 
-	responsive: true,
+	responsive: false,
 	maintainAspectRatio: true
     });
     
 
     // Data for IPs.
-    var ips_chart = new Chart(IPs,  { 
-	responsive: true,
-	maintainAspectRatio: true
-    });
-    var ips_data = {
+    var cache_data = {
         labels : [],
         datasets : [
             {
-                fillColor : "rgba(160,204,182,0.4)",
+                fillColor : "rgba(86,20,32,0.4)",
                 strokeColor : "#ACC26D",
                 pointColor : "#ddd",
                 pointStrokeColor : "#9DB86D",
@@ -95,6 +91,11 @@ function tabify ( x, l, a, b, z ) {
             }
         ]
     };
+    var cache_chart = new Chart(IPs).Line(cache_data,  { 
+	responsive: false,
+	maintainAspectRatio: true
+    });
+ 
 
     var generation_count=0;
     var best_div = document.getElementById('best');
@@ -126,21 +127,29 @@ function tabify ( x, l, a, b, z ) {
 
 	    // And puts another one in the pool
 	    $.ajax({ type: 'put',
-		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
+		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } )	
+		.done( function( data ) {
+		    console.log( "Put response " + data );
+		    if ( cache_data.labels.length > chart_size ) {
+			cache_chart.removeData();
+		    }
+		    cache_chart.addData([data.length], generation_count);
+		    cache_chart.update();
+		});
 
 	    // Tracks the number of IPs
-	    $.get("/IPs", function( data ) {
-		ips_data.labels.push(generation_count);
-		ips_data.datasets[0].data.push( Object.keys( data ).length );
-		ips_chart.Line(ips_data);
-	    });
+	    // $.get("/IPs", function( data ) {
+	    // 	ips_data.labels.push(generation_count);
+	    // 	ips_data.datasets[0].data.push( Object.keys( data ).length );
+	    // 	ips_chart.Line(ips_data);
+	    // });
 	}
 	
 	if ( eo.population[0].fitness < traps*trap_b ) {
 	    setTimeout(do_ea, 5);
 	} else {
 	    $.ajax({ type: 'put',
-		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
+		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness })
 	    console.log(  eo.population[0] );
 	}
     })();

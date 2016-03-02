@@ -31,13 +31,15 @@ while (@brackets ) {
     my %these_actual_IPs;
     my $puts = 0;
     while ( $this_IP !~ /solution/ ) {
-      $puts++;
-      my $msg_start = decode_json $this_IP;
-      my $this_ID = $msg_start->{'worker_uuid'}?$msg_start->{'worker_uuid'}:$msg_start->{'IP'};
-      $these_IPs{ $this_ID }++;
-      if ( $msg_start->{'updated'} == 1) {
-	$these_actual_IPs{ $this_ID }++;
-	$real_puts++;
+      if ( $this_IP !~ /start/ ) {
+	$puts++;
+	my $msg_start = decode_json $this_IP;
+	my $this_ID = $msg_start->{'worker_uuid'}?$msg_start->{'worker_uuid'}:$msg_start->{'IP'};
+	$these_IPs{ $this_ID }++;
+	if ( $msg_start->{'updated'} == 1) {
+	  $these_actual_IPs{ $this_ID }++;
+	  $real_puts++;
+	}
       }
       last if !@brackets;
       $this_IP = shift @brackets;

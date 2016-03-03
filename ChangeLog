@@ -1,3 +1,14 @@
+2016-02-28  Juan J. merelo  <jmerelo@penny>
+
+	* index.js (App): Avoid getting the same chromosome over and over
+	again and carried over from one run to the next.
+	(App): Adds new key that says if it's been updated or not when a
+	chromosome is sent.
+
+2016-02-26  Juan J. merelo  <jmerelo@penny>
+
+	* package.json: This will change the data store to a finite cache
+	that uses leroux-cache, already installed.
 
 2015-04-01  JJ Merelo  <jmerelo@penny>
 

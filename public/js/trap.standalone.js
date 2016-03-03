@@ -1,6 +1,9 @@
 function tabify ( x, l, a, b, z ) {
     var tab = "<table style='border:1px solid black;padding:0;margin:0;width:100%'><tr>";
     for ( var i = 0; i < x.length; i+=4 ) {
+	if ( i % 40 === 0 ) {
+	    tab +="</tr><tr>\n";
+	}
 	tab += "<td style='background-color:";
 	var this_substr = x.substr(  i, l );
 	var num_ones = 0;
@@ -31,7 +34,7 @@ function tabify ( x, l, a, b, z ) {
     
     var population_size = 128;
     var period = 100;
-    var traps = 40;
+    var traps = 50;
     var trap_len = 4;
     var trap_b =  2;
     var chromosome_size = traps*trap_len;
@@ -56,10 +59,7 @@ function tabify ( x, l, a, b, z ) {
     IPs.canvas.height=document.getElementById('ips_canvas').clientHeight*0.7;
 
     // Chart data
-    var this_chart = new Chart(fitness,  { 
-	responsive: true,
-	maintainAspectRatio: true
-    });
+    var chart_size = 50;
     var fitness_data = {
         labels : [],
         datasets : [
@@ -72,17 +72,18 @@ function tabify ( x, l, a, b, z ) {
             }
         ]
     };
-
-    // Data for IPs.
-    var ips_chart = new Chart(IPs,  { 
-	responsive: true,
+    var this_chart = new Chart(fitness).Line(fitness_data,  { 
+	responsive: false,
 	maintainAspectRatio: true
     });
-    var ips_data = {
+    
+
+    // Data for IPs.
+    var cache_data = {
         labels : [],
         datasets : [
             {
-                fillColor : "rgba(160,204,182,0.4)",
+                fillColor : "rgba(86,20,32,0.4)",
                 strokeColor : "#ACC26D",
                 pointColor : "#ddd",
                 pointStrokeColor : "#9DB86D",
@@ -90,6 +91,11 @@ function tabify ( x, l, a, b, z ) {
             }
         ]
     };
+    var cache_chart = new Chart(IPs).Line(cache_data,  { 
+	responsive: false,
+	maintainAspectRatio: true
+    });
+ 
 
     var generation_count=0;
     var best_div = document.getElementById('best');
@@ -98,12 +104,18 @@ function tabify ( x, l, a, b, z ) {
 	best_div.innerHTML=tabify( eo.population[0].string, trap_len,1, trap_b, trap_len -1 );
 	generation_count++;
 	if ( (generation_count % period === 0) ) {
-	    console.log(generation_count);
+//	    console.log(generation_count);
 	    
 	    // chart fitness
-	    fitness_data.labels.push(generation_count);
-	    fitness_data.datasets[0].data.push(eo.population[0].fitness);
-	    this_chart.Line(fitness_data);
+	    if ( fitness_data.labels.length > chart_size ) {
+		this_chart.removeData();
+	    }
+//	    console.log(this_chart);
+	    this_chart.addData([eo.population[0].fitness], generation_count);
+            this_chart.update();
+	    // fitness_data.labels.push(generation_count);
+	    // fitness_data.datasets[0].data.push(eo.population[0].fitness);
+	    // this_chart.Line(fitness_data);
 
 	    // gets a random chromosome from the pool
 	    $.get("/random", function( data ) {
@@ -115,21 +127,32 @@ function tabify ( x, l, a, b, z ) {
 
 	    // And puts another one in the pool
 	    $.ajax({ type: 'put',
-		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
+		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } )	
+		.done( function( data ) {
+//		    console.log( "Put response " + data );
+		    if ( data.length <= 1 ) { // Restart happened
+			document.location.reload(); // restart EA
+		    }
+		    if ( cache_data.labels.length > chart_size ) {
+			cache_chart.removeData();
+		    }
+		    cache_chart.addData([data.length], generation_count);
+		    cache_chart.update();
+		});
 
 	    // Tracks the number of IPs
-	    $.get("/IPs", function( data ) {
-		ips_data.labels.push(generation_count);
-		ips_data.datasets[0].data.push( Object.keys( data ).length );
-		ips_chart.Line(ips_data);
-	    });
+	    // $.get("/IPs", function( data ) {
+	    // 	ips_data.labels.push(generation_count);
+	    // 	ips_data.datasets[0].data.push( Object.keys( data ).length );
+	    // 	ips_chart.Line(ips_data);
+	    // });
 	}
 	
 	if ( eo.population[0].fitness < traps*trap_b ) {
 	    setTimeout(do_ea, 5);
 	} else {
 	    $.ajax({ type: 'put',
-		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } );
+		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness })
 	    console.log(  eo.population[0] );
 	}
     })();

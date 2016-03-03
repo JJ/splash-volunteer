@@ -129,7 +129,10 @@ function tabify ( x, l, a, b, z ) {
 	    $.ajax({ type: 'put',
 		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } )	
 		.done( function( data ) {
-		    console.log( "Put response " + data );
+//		    console.log( "Put response " + data );
+		    if ( data.length === 0 ) { // Restart happened
+			document.location.reload(); // restart EA
+		    }
 		    if ( cache_data.labels.length > chart_size ) {
 			cache_chart.removeData();
 		    }

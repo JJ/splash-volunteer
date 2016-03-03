@@ -6,5 +6,8 @@ node_js:
   - "stable"
   - "4.0"
   - "5.0"
-script: mocha
+script:
+  - npm test
+after_success:
+  - npm run coveralls
 

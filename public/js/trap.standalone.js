@@ -78,7 +78,7 @@ function tabify ( x, l, a, b, z ) {
     });
     
 
-    // Data for IPs.
+    // Data for caches.
     var cache_data = {
         labels : [],
         datasets : [
@@ -95,7 +95,7 @@ function tabify ( x, l, a, b, z ) {
 	responsive: false,
 	maintainAspectRatio: true
     });
- 
+    
 
     var generation_count=0;
     var best_div = document.getElementById('best');
@@ -129,10 +129,18 @@ function tabify ( x, l, a, b, z ) {
 	    $.ajax({ type: 'put',
 		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } )	
 		.done( function( data ) {
-//		    console.log( "Put response " + data );
-		    if ( data.length <= 1 ) { // Restart happened
-			document.location.reload(); // restart EA
+		    var points =  cache_chart.datasets[0].points;
+		    var last_point =  points[ points.length -1 ];
+		    if ( typeof( last_point ) !== 'undefined' ) {
+			console.log( last_point );
+			console.log( last_point.value );
+			if ( last_point.value - data.length  > 5 ) { // cache restarted
+			    document.location.reload(); // restart EA
+			}
 		    }
+//		    if ( data.length <= 1 ) { // Restart happened
+//			document.location.reload(); // restart EA
+//		    }
 		    if ( cache_data.labels.length > chart_size ) {
 			cache_chart.removeData();
 		    }

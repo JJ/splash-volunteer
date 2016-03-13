@@ -20,6 +20,7 @@ my @brackets = grep( /(start|chromosome|solution)/, @file_contents);
 my @times;
 my $format = DateTime::Format::RFC3339->new();
 my %rebooters;
+my %PUTs_by_IP;
 while (@brackets ) {
     my $start = shift @brackets;
     my $contents_start = decode_json $start;
@@ -38,21 +39,20 @@ while (@brackets ) {
       if ( $JSON_msg !~ /start/ ) {
 	  $puts++;
 	  my $msg_start = decode_json $JSON_msg;
-	  my $this_IP=$msg_start->{'IP'};
-	  if ( $fitness_sequence{$this_IP} ) {
-	    $last_fitness_by_IP = shift @{$fitness_sequence{$this_IP}};
-	    say "$this_IP, $last_fitness_by_IP, $msg_start->{'fitness'}";
-	    if ( $last_fitness_by_IP > $msg_start->{'fitness'} ) {
-	      $rebooters{$this_IP}++;
+	  my $this_ID = $msg_start->{'worker_uuid'}?$msg_start->{'worker_uuid'}:$msg_start->{'IP'};
+	  if ( $fitness_sequence{$this_ID} ) {
+	    $last_fitness_by_IP = pop @{$fitness_sequence{$this_ID}};
+#	    say "$this_ID, $last_fitness_by_IP, $msg_start->{'fitness'}";
+	    if ( $last_fitness_by_IP > ($msg_start->{'fitness'} + 10 ) ) {
+	      $rebooters{$this_ID}++;
 	      $reboots++;
 	    }
-	    push @{$fitness_sequence{$this_IP}}, ($last_fitness_by_IP,$msg_start->{'fitness'}); # put it back	
+	    push @{$fitness_sequence{$this_ID}}, ($last_fitness_by_IP,$msg_start->{'fitness'}); # put it back	
 	  } else {
 	    $fitness_sequence{$msg_start->{'IP'}} = [$msg_start->{'fitness'}];
 	  }
-	  
-	  my $this_ID = $msg_start->{'worker_uuid'}?$msg_start->{'worker_uuid'}:$msg_start->{'IP'};
 	  $these_IPs{ $this_ID }++;
+	  $PUTs_by_IP{ $this_ID }++;
 	  if ( $msg_start->{'updated'} == 1) {
 	      $these_actual_IPs{ $this_ID }++;
 	      $real_puts++;
@@ -73,5 +73,15 @@ while (@brackets ) {
     }
 }
 
-#say "IPs,milliseconds,PUTs,actualIPs,actualPUTs,reboots";
-say join("\n", map("$_->[0],$_->[1],$_->[2],$_->[3],$_->[4],$_->[5]",@times));
+my ($root_file) = ($file_name =~ /(.+)\.log/);
+open (my $file_by_exp, ">" ,$root_file."_by_exp.csv") || die "Can't open: $!";
+say $file_by_exp "IPs,milliseconds,PUTs,actualIPs,actualPUTs,reboots";
+say $file_by_exp join("\n", map("$_->[0],$_->[1],$_->[2],$_->[3],$_->[4],$_->[5]",@times));
+close $file_by_exp;
+
+open (my $file_by_IP, ">" , $root_file."_by_IP.csv" )|| die "Can't open: $!";
+say $file_by_IP "PUTs,reboots";
+for my $ip ( sort { $PUTs_by_IP{$b} <=>$ PUTs_by_IP{$a} } keys %PUTs_by_IP) {
+    say $file_by_IP "$PUTs_by_IP{$ip},",$rebooters{$ip} || 0;
+}
+close $file_by_IP;

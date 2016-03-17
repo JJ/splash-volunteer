@@ -29,6 +29,14 @@ describe( "Loads termination correctly", function() {
 });
 
 describe( "Puts and returns chromosome", function() {
+    var chromosomes = new Array;
+    it('should generate a random chromosome', function(done) {
+	for ( var i = 0; i < app.config.vars.cache_size; i++ ) {
+	    chromosomes.push( utils.random( 16 ) );
+	}
+	chromosomes.length.should.be.equal( app.config.vars.cache_size );
+	done();
+    });
     it('should return correct type', function (done) {
 	request(app)
 	    .put('/one/'+one_chromosome.string+"/"+one_chromosome.fitness)

@@ -133,6 +133,7 @@ app.listen(app.get('port'), server_ip_address, function() {
 // Exports for tests
 module.exports = app;
 
+// Obtain a filename for logging, incrementing its number in a sequence
 function get_winston_filename ( log_dir ) {
     var sequence = 0;
     // set up experiment sequence
@@ -152,3 +153,15 @@ function get_winston_filename ( log_dir ) {
     }
     return filename;
 }
+
+// Get a random element from the cache
+function get_random_element () {
+    var keys = new Array;
+    cache.forEach( function( value, key, cache ) {
+	keys.push(key);
+    });
+    return keys[Math.random()*keys.length];
+}
+
+module.exports.get_winston_filename = get_winston_filename;
+module.exports.get_random_element = get_random_element;

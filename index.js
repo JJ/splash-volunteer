@@ -155,11 +155,21 @@ function get_winston_filename ( log_dir ) {
 
 // Get a random element from the cache
 function get_random_element () {
-    var keys = new Array;
-    cache.forEach( function( value, key, cache ) {
-	keys.push(key);
-    });
-    return keys[Math.floor(Math.random()*keys.length)];
+    if (cache.size > 0 ) {
+	var keys = new Array;
+	cache.forEach( function( value, key, cache ) {
+	    keys.push(key);
+	});
+	console.log( "keys " );
+	console.log( keys.length );
+	if ( keys.length === 1 ) {
+	    return keys[0];
+	} else {
+	    return keys[Math.floor(Math.random()*keys.length)];
+	}
+    } else {
+	return null;
+    }
 }
 
 module.exports.get_winston_filename = get_winston_filename;

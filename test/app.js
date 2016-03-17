@@ -42,7 +42,13 @@ describe( "Puts and returns chromosome", function() {
 	request(app)
 	    .put('/one/'+chromosome+"/"+utils.max_ones(chromosome))
 	    .expect('Content-Type', /json/)
-	    .expect(200);
+	    .expect(200)	
+	    .end( function ( error, resultado ) {
+		    if ( error ) {
+			return done( error );
+		    }
+		    resultado.body.should.have.property('length');
+	    });
 
 	// Already one in cache
 	chromosomes.forEach( function( chromosome ) {

@@ -41,13 +41,8 @@ var sequence = 0;
 app.get('/random', function(req, res){
     console.log( "Cache size " + cache.size );
     if (cache.size > 0) {
-	var probability = 1/cache.size;
-	var random_chromosome;
-	cache.forEach( function( value, key, cache ) {
-	    if ( !random_chromosome && Math.random() < probability ) {
-		random_chromosome = key;
-	    }
-	});
+	var random_chromosome = get_random_element();
+	console.log("Random " + random_chromosome);
 	res.send( { 'chromosome': random_chromosome } );
 	logger.info('get');
     } else {
@@ -58,7 +53,7 @@ app.get('/random', function(req, res){
 
 // Retrieves the whole chromosome pool
 app.get('/chromosomes', function(req, res){
-    var chromosomes = {};
+    var chromosomes = new Object;
     cache.forEach( function( value, key, cache ) {
 	chromosomes[key]=value;
     });
@@ -77,7 +72,7 @@ app.get('/seq_number', function(req, res){
 
 // Adds one chromosome to the pool, with fitness
 app.put('/one/:chromosome/:fitness', function(req, res){
-    console.log( "Cache size " + cache.size );
+//    console.log( "Cache size " + cache.size );
     if ( req.params.chromosome ) {
 
 //	console.log( "Caching "+req.params.chromosome + " " + req.params.fitness );
@@ -162,7 +157,7 @@ function get_random_element () {
     cache.forEach( function( value, key, cache ) {
 	keys.push(key);
     });
-    return keys[Math.random()*keys.length];
+    return keys[Math.floor(Math.random()*keys.length)];
 }
 
 module.exports.get_winston_filename = get_winston_filename;

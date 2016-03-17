@@ -53,21 +53,22 @@ describe( "Puts and returns chromosome", function() {
 	done();
     });
 
-    // it('should return chromosome', function (done) {
-    // 	request(app)
-    // 	    .get('/random')
-    // 	    .expect('Content-Type', /json/)
-    // 	    .expect(200)
-    // 	    .end( function ( error, resultado ) {
-    // 		if ( error ) {
-    // 		    return done( error );
-    // 		}
-    // 		console.log("Resultado");
-    // 		console.log(resultado.body);
-    // 		resultado.body.should.have.property('chromosome');
-    // 		done();
-    // 	    });
-    // });
+    it('should return random chromosome', function (done) {
+    	request(app)
+    	    .get('/random')
+    	    .expect('Content-Type', /json/)
+    	    .expect(200)
+    	    .end( function ( error, resultado ) {
+    		if ( error ) {
+    		    return done( error );
+    		}
+    		console.log("Resultado");
+    		console.log(resultado.body);
+    		resultado.body.should.have.property('chromosome');
+    		done();
+    	    });
+    });
+    
     it('should return all chromosomes', function (done) {
 	request(app)
 	    .get('/chromosomes')

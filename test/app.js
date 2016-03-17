@@ -49,6 +49,7 @@ describe( "Puts and returns chromosome", function() {
 		    }
 		    resultado.body.should.have.property('length');
 		    resultado.body.should.have.property('chromosome');
+		    resultado.body.should.have.property('updated');
 		});
 	});
 	done();

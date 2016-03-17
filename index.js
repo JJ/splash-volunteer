@@ -39,6 +39,7 @@ var sequence = 0;
 
 // Retrieves a random chromosome
 app.get('/random', function(req, res){
+    console.log( "Cache size " + cache.size );
     if (cache.size > 0) {
 	var probability = 1/cache.size;
 	var random_chromosome;
@@ -76,6 +77,7 @@ app.get('/seq_number', function(req, res){
 
 // Adds one chromosome to the pool, with fitness
 app.put('/one/:chromosome/:fitness', function(req, res){
+    console.log( "Cache size " + cache.size );
     if ( req.params.chromosome ) {
 
 //	console.log( "Caching "+req.params.chromosome + " " + req.params.fitness );

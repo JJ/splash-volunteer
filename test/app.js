@@ -38,6 +38,13 @@ describe( "Puts and returns chromosome", function() {
     });
 
     it('should put chromosomes and return correct type', function (done) {
+	var chromosome = utils.random(16);
+	request(app)
+	    .put('/one/'+chromosome+"/"+utils.max_ones(chromosome))
+	    .expect('Content-Type', /json/)
+	    .expect(200);
+
+	// Already one in cache
 	chromosomes.forEach( function( chromosome ) {
 	    request(app)
 		.put('/one/'+chromosome+"/"+utils.max_ones(chromosome))

@@ -118,17 +118,21 @@ function tabify ( x, l, a, b, z ) {
 	    // this_chart.Line(fitness_data);
 
 	    // gets a random chromosome from the pool
-	    $.get("/random", function( data ) {
-		if ( data.chromosome ) {
-		    eo.incorporate( data.chromosome );
-		    console.log('Getting ' + data.chromosome );
-		}
-	    });
+	    // $.get("/random", function( data ) {
+	    // 	if ( data.chromosome ) {
+	    // 	    eo.incorporate( data.chromosome );
+	    // 	    console.log('Getting ' + data.chromosome );
+	    // 	}
+	    // });
 
 	    // And puts another one in the pool
 	    $.ajax({ type: 'put',
 		     url: "one/"+eo.population[0].string+"/"+eo.population[0].fitness } )	
 		.done( function( data ) {
+		    if ( data.chromosome ) {
+			eo.incorporate( data.chromosome );
+			console.log('Getting ' + data.chromosome );
+		    }
 		    var points =  cache_chart.datasets[0].points;
 		    var last_point =  points[ points.length -1 ];
 		    if ( typeof( last_point ) !== 'undefined' ) {

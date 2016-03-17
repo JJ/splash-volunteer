@@ -39,10 +39,10 @@ var sequence = 0;
 
 // Retrieves a random chromosome
 app.get('/random', function(req, res){
-    console.log( "Cache size " + cache.size );
+//    console.log( "Cache size " + cache.size );
     if (cache.size > 0) {
 	var random_chromosome = get_random_element();
-	console.log("Random " + random_chromosome);
+//	console.log("Random " + random_chromosome);
 	res.send( { 'chromosome': random_chromosome } );
 	logger.info('get');
     } else {

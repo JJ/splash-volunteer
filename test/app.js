@@ -39,7 +39,6 @@ describe( "Puts and returns chromosome", function() {
 
     it('should put chromosomes and return correct type', function (done) {
 	chromosomes.forEach( function( chromosome ) {
-	    console.log( chromosome );
 	    request(app)
 		.put('/one/'+chromosome+"/"+utils.max_ones(chromosome))
 		.expect(200)

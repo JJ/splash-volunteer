@@ -72,11 +72,12 @@ app.get('/seq_number', function(req, res){
 
 // Adds one chromosome to the pool, with fitness
 app.put('/one/:chromosome/:fitness', function(req, res){
-//    console.log( "Cache size " + cache.size );
+
     if ( req.params.chromosome ) {
 
 //	console.log( "Caching "+req.params.chromosome + " " + req.params.fitness );
 	var client_ip;
+	var random_chromosome = get_random_element();
 	if ( ! process.env.OPENSHIFT_NODEJS_IP ) { // this is not openshift
 	    client_ip = req.connection.remoteAddress;
 	} else {
@@ -107,7 +108,8 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	    sequence++;
 	    logger.info( { "start": sequence });	    
 	}
-	res.send( { length : cache.size,
+	res.send( { chromosome: random_chromosome,
+		    length : cache.size,
 		    updated: updated });
     } else {
 	res.send( { length : 0 });

@@ -1,0 +1,116 @@
+---
+title: "Volunteer computing using NodIO: experiment report"
+author: "J. J. Merelo"
+date: "18 de marzo de 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE,cache=FALSE,echo=FALSE}
+
+library("ggplot2")
+experiment.data <- data.frame(Experiment=character(),
+                              milliseconds=character(),                           
+                              IPs=character(), 
+                              actualIPs=character(),
+                              PUTs=character(),
+                              actualPUTs=character(),
+                              PUTratio = character(),
+                              PUTsIP =character())
+
+these.experiments <- c("17-0")
+
+experiment.aggregates <- data.frame(Experiment=character(),
+                                    milliseconds=character(),
+                                    IPs=character(),
+                                    actualIPs = character(),
+                                    PUTs = character(),
+                                    actualPUTs = character(),
+                                    count = character(),
+                                    totalIPs = character(),
+                                    PUTsIP = character())
+
+experiment.aggregates.filtered = experiment.aggregates
+
+ips.data <- data.frame(Experiment=character(),                      
+                       PUTs=character(),
+                       reboots=character(),
+                       idu=character(),
+                       idx=character())
+
+ips.aggregates <- data.frame(Experiment=character(),
+                             PUTs = character(),
+                             reboots = character(),
+                             avgPUTs = character(),
+                             avgreboots = character(),
+                             totalIPs = character())
+
+for ( i in these.experiments ) {
+    this.data <- read.csv(paste0("nodio-2016-3-",i,"_by_exp.csv"))
+
+    this.ip.data <- read.csv(paste0("nodio-2016-3-",i,"_by_IP.csv"))
+    this.len <- length(this.ip.data$PUTs)
+    seq <- 1:this.len
+    ips.data <- rbind(ips.data,
+                      data.frame(Experiment=rep(i,length(this.ip.data$PUTs)),
+                                 idu=seq,
+                                 idx=seq/this.len,
+                                 PUTs=as.integer(this.ip.data$PUTs),
+                                 reboots=as.integer(this.ip.data$reboots))
+                       )
+    
+    ips.aggregates <- rbind( ips.aggregates,
+                            data.frame(Experiment=i,
+                                       PUTs = median(this.ip.data$PUTs),
+                                       reboots = median(this.ip.data$reboots),
+                                       avgPUTs = mean(this.ip.data$PUTs),
+                                       avgreboots = mean(this.ip.data$reboots),
+                                       totalIPs =this.len )
+                            )
+    
+    experiment.aggregates <- rbind( experiment.aggregates,
+                                   data.frame( Experiment=i,                   
+                                              milliseconds=median(as.integer(this.data$milliseconds)),
+                                              IPs=median(as.integer(this.data$IPs)),
+                                              actualIPs=median(as.integer(this.data$actualIPs)),
+                                              PUTs=median(as.integer(this.data$PUTs)),
+                                              actualPUTs=median(as.integer(this.data$actualPUTs)),
+                                              PUTratio=median(as.integer(this.data$actualPUTs)/as.integer(this.data$PUTs)),
+                                              count= length(this.data$IPs),
+                                              totalIPs=this.len,
+                                              PUTsIP=median(as.integer(this.data$PUTs)/as.integer(this.data$IPs)))
+                                   )
+    
+    experiment.data <- rbind( experiment.data,
+                             data.frame( Experiment=rep(i, length(this.data$IPs)),                   
+                                        milliseconds=as.integer(this.data$milliseconds),
+                                        IPs=as.integer(this.data$IPs),
+                                        actualIPs=as.integer(this.data$actualIPs),
+                                        PUTs=as.integer(this.data$PUTs),
+                                        actualPUTs=as.integer(this.data$actualPUTs),
+                                        PUTsIP=as.integer(this.data$PUTs)/as.integer(this.data$IPs)))
+
+    this.data <- this.data[this.data$actualPUTs>=16,]
+    experiment.aggregates.filtered <- rbind( experiment.aggregates.filtered,
+                                            data.frame( Experiment=i,                   
+                                                       milliseconds=median(as.integer(this.data$milliseconds)),
+                                                       IPs=median(as.integer(this.data$IPs)),
+                                                       actualIPs=median(as.integer(this.data$actualIPs)),
+                                                       PUTs=median(as.integer(this.data$PUTs)),
+                                                       actualPUTs=median(as.integer(this.data$actualPUTs)),
+                                                       count= length(this.data$IPs),
+                                                       PUTsIP=median(as.integer(this.data$PUTs)/as.integer(this.data$IPs))
+                                                       )
+                                            )
+
+}
+
+experiment.data$newgraph <- grepl("newgraph",experiment.data$Experiment)
+experiment.data$nooverlap <- grepl("nooverlap",experiment.data$Experiment)
+experiment.data$reboot <- grepl("reboot",experiment.data$Experiment)
+experiment.data$cachecrash <- grepl("cache",experiment.data$Experiment)
+
+```
+
+#Abstract
+
+This is the report on the experiment performed on the afternoon of March 17th and thereafter. Main change to the code base was the use of a single PUT request to interchange information with the pool. Main contributor to the volunteers was a [tweet by Randall Olson](https://twitter.com/randal_olson/status/710534806090682368) and its subsequent posting in [Reddit](https://twitter.com/PureValueLtd/status/710543530503102464).

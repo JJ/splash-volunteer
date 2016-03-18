@@ -21,6 +21,7 @@ my @times;
 my $format = DateTime::Format::RFC3339->new();
 my %rebooters;
 my %PUTs_by_IP;
+my %IPs_per_minute;
 while (@brackets ) {
     my $start = shift @brackets;
     my $contents_start = decode_json $start;
@@ -40,6 +41,8 @@ while (@brackets ) {
 	  $puts++;
 	  my $msg_start = decode_json $JSON_msg;
 	  my $this_ID = $msg_start->{'worker_uuid'}?$msg_start->{'worker_uuid'}:$msg_start->{'IP'};
+	  my ($minute) = ( $msg_start->{'timestamp'} =~ /(.+T\d+:\d+)/);
+	  $IPs_per_minute{$minute}{$this_ID}++;
 	  if ( $fitness_sequence{$this_ID} ) {
 	    $last_fitness_by_IP = pop @{$fitness_sequence{$this_ID}};
 #	    say "$this_ID, $last_fitness_by_IP, $msg_start->{'fitness'}";
@@ -83,5 +86,12 @@ open (my $file_by_IP, ">" , $root_file."_by_IP.csv" )|| die "Can't open: $!";
 say $file_by_IP "PUTs,reboots";
 for my $ip ( sort { $PUTs_by_IP{$b} <=>$ PUTs_by_IP{$a} } keys %PUTs_by_IP) {
     say $file_by_IP "$PUTs_by_IP{$ip},",$rebooters{$ip} || 0;
+}
+close $file_by_IP;
+
+open (my $file_per_minute, ">" , $root_file."_per_minute.csv" )|| die "Can't open: $!";
+say $file_per_minute "time,IPs";
+for my $m ( sort { $a cmp $b } keys %IPs_per_minute) {
+    say $file_per_minute "$m,", scalar keys %{$IPs_per_minute{$m}} || 0;
 }
 close $file_by_IP;

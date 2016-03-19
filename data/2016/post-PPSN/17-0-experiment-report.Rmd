@@ -17,7 +17,8 @@ experiment.data <- data.frame(Experiment=character(),
                               actualPUTs=character(),
                               PUTratio = character(),
                               PUTsIP =character(),
-                              entropy=character())
+                              entropy=character(),
+                              cacheEntropy=character())
 
 these.experiments <- c("17-0")
 
@@ -30,7 +31,8 @@ experiment.aggregates <- data.frame(Experiment=character(),
                                     count = character(),
                                     totalIPs = character(),
                                     PUTsIP = character(),
-                                    entropy=character())
+                                    entropy=character(),
+                                    cacheEntropy=character())
 
 experiment.aggregates.filtered = experiment.aggregates
 
@@ -94,7 +96,8 @@ for ( i in these.experiments ) {
                                               count= length(this.data$IPs),
                                               totalIPs=this.len,
                                               PUTsIP=median(as.integer(this.data$PUTs)/as.integer(this.data$IPs)),
-                                              entropy=median(this.data$entropy)
+                                              entropy=median(this.data$entropy),
+                                              cacheEntropy=median(this.data$cacheEntropy)
                                               )
                                    )
     
@@ -106,7 +109,8 @@ for ( i in these.experiments ) {
                                         PUTs=as.integer(this.data$PUTs),
                                         actualPUTs=as.integer(this.data$actualPUTs),
                                         PUTsIP=as.integer(this.data$PUTs)/as.integer(this.data$IPs),
-                                        entropy=as.numeric(this.data$entropy)
+                                        entropy=as.numeric(this.data$entropy),
+                                        cacheEntropy=as.numeric(this.data$cacheEntropy)
                                         )
                               )
 
@@ -155,7 +159,11 @@ This is the report on the experiment performed on the afternoon of March 17th an
 #IPs
 
 ```{r experiment, cache=FALSE,echo=FALSE}
-ggplot(data=experiment.data)+geom_point(aes(x=milliseconds,y=entropy,size=PUTs,color=IPs))+scale_x_log10()+scale_y_log10()
+max <- max(experiment.data$IPs)
+exp.palette <- colorRampPalette(brewer.pal(12,"Paired"))
+ggplot(data=experiment.data)+geom_point(aes(x=milliseconds,y=entropy,size=PUTs,color=IPs))+scale_x_log10()+scale_y_log10()+scale_color_gradient(limits=c(1,max),low='red')
+ggplot(data=experiment.data)+geom_point(aes(x=milliseconds,y=cacheEntropy,size=PUTs,color=IPs))+scale_x_log10()+scale_y_log10()+scale_color_gradient(limits=c(1,max),low='red')
+ggplot(data=experiment.data)+geom_point(aes(x=entropy,y=cacheEntropy,size=PUTs,color=IPs))+scale_color_gradient(limits=c(1,max),low='red')
 ```
 
 ```{r timegraph, cache=FALSE,echo=FALSE}

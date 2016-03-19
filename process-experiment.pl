@@ -8,6 +8,7 @@ use v5.14;
 use JSON;
 use File::Slurp::Tiny qw(read_lines);
 use DateTime::Format::RFC3339;
+use Data::Password::Entropy;
 
 my $file_name = shift || "data/2016/post-PPSN/nodio-2016-3-18-0.log";
 
@@ -40,6 +41,7 @@ while (@brackets ) {
     my $puts = 0;
     my $reboots = 0;
     my $last_fitness_by_IP = 0;
+    my %these_PUTs;
     while ( $JSON_msg !~ /solution/ ) {
       if ( $JSON_msg !~ /start/ ) {
 	  $puts++;
@@ -48,6 +50,7 @@ while (@brackets ) {
 	  my ($minute,$second) = ( $msg_start->{'timestamp'} =~ /(.+T\d+:\d+):(\d+)/);
 	  my $this_second = "$minute:$second";
 	  $PUTs_per_second{$this_second}++;
+	  $these_PUTs{$this_second}++;
 	  if ( $msg_start->{'updated'} == 1) {
 	      $updates_per_second{$this_second}++;
 	      $updates_per_minute{$minute}++;
@@ -81,16 +84,24 @@ while (@brackets ) {
       
       my $duration = $format->parse_datetime( $contents_end->{'timestamp'} ) 
 	- $format->parse_datetime( $contents_start->{'timestamp'} );
+      # Compute entropy
+      my $put_string;
+      for my $p ( sort { $a cmp $b } keys %these_PUTs) {
+	  $put_string .= chr(32+$these_PUTs{$p});
+      }
+      my $this_entropy = password_entropy($put_string)/length($put_string);
       push @times, 
 	[ scalar keys %these_IPs, 
-	  $duration->in_units('minutes')*60000+$duration->in_units('nanoseconds')/1e6, $puts, scalar keys %these_actual_IPs, $real_puts, $reboots ]; #milliseconds
+	  $duration->in_units('minutes')*60000+$duration->in_units('nanoseconds')/1e6, 
+	  $puts, scalar keys %these_actual_IPs, $real_puts, $reboots, 
+	  $this_entropy ]; #milliseconds
     }
 }
 
 my ($root_file) = ($file_name =~ /(.+)\.log/);
 open (my $file_by_exp, ">" ,$root_file."_by_exp.csv") || die "Can't open: $!";
-say $file_by_exp "IPs,milliseconds,PUTs,actualIPs,actualPUTs,reboots";
-say $file_by_exp join("\n", map("$_->[0],$_->[1],$_->[2],$_->[3],$_->[4],$_->[5]",@times));
+say $file_by_exp "IPs,milliseconds,PUTs,actualIPs,actualPUTs,reboots,entropy";
+say $file_by_exp join("\n", map("$_->[0],$_->[1],$_->[2],$_->[3],$_->[4],$_->[5],$_->[6]",@times));
 close $file_by_exp;
 
 open (my $file_by_IP, ">" , $root_file."_by_IP.csv" )|| die "Can't open: $!";

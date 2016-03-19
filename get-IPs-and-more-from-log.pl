@@ -9,7 +9,7 @@ use JSON;
 use File::Slurp::Tiny qw(read_lines);
 use DateTime::Format::RFC3339;
 
-my $file_name = shift || "log/w-workers.log";
+my $file_name = shift || "data/2016/post-PPSN/nodio-2016-3-18-0.log";
 
 my @file_contents = read_lines($file_name);
 
@@ -22,6 +22,9 @@ my $format = DateTime::Format::RFC3339->new();
 my %rebooters;
 my %PUTs_by_IP;
 my %IPs_per_minute;
+my %PUTs_per_second;
+my %PUTs_per_minute;
+my %updates_per_second;
 while (@brackets ) {
     my $start = shift @brackets;
     my $contents_start = decode_json $start;
@@ -41,8 +44,14 @@ while (@brackets ) {
 	  $puts++;
 	  my $msg_start = decode_json $JSON_msg;
 	  my $this_ID = $msg_start->{'worker_uuid'}?$msg_start->{'worker_uuid'}:$msg_start->{'IP'};
-	  my ($minute) = ( $msg_start->{'timestamp'} =~ /(.+T\d+:\d+)/);
+	  my ($minute,$second) = ( $msg_start->{'timestamp'} =~ /(.+T\d+:\d+):(\d+)/);
+	  my $this_second = "$minute:$second";
+	  $PUTs_per_second{$this_second}++;
+	  if ( $msg_start->{'updated'} == 1) {
+	      $updates_per_second{$this_second}++;
+	  }
 	  $IPs_per_minute{$minute}{$this_ID}++;
+	  $PUTs_per_minute{$minute}++;
 	  if ( $fitness_sequence{$this_ID} ) {
 	    $last_fitness_by_IP = pop @{$fitness_sequence{$this_ID}};
 #	    say "$this_ID, $last_fitness_by_IP, $msg_start->{'fitness'}";
@@ -90,8 +99,15 @@ for my $ip ( sort { $PUTs_by_IP{$b} <=>$ PUTs_by_IP{$a} } keys %PUTs_by_IP) {
 close $file_by_IP;
 
 open (my $file_per_minute, ">" , $root_file."_per_minute.csv" )|| die "Can't open: $!";
-say $file_per_minute "time,IPs";
+say $file_per_minute "time,IPs,PUTs";
 for my $m ( sort { $a cmp $b } keys %IPs_per_minute) {
-    say $file_per_minute "$m,", scalar keys %{$IPs_per_minute{$m}} || 0;
+    say $file_per_minute "$m,", scalar keys %{$IPs_per_minute{$m}} || 0, ",$PUTs_per_minute{$m}";
+}
+close $file_by_IP;
+
+open (my $file_per_second, ">" , $root_file."_per_second.csv" )|| die "Can't open: $!";
+say $file_per_second "time,PUTs,updates";
+for my $p ( sort { $a cmp $b } keys %PUTs_per_second) {
+    say $file_per_second "$p,", $PUTs_per_second{$p} || 0, ", ",$updates_per_second{$p} || 0;
 }
 close $file_by_IP;

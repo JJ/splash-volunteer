@@ -25,6 +25,7 @@ my %IPs_per_minute;
 my %PUTs_per_second;
 my %PUTs_per_minute;
 my %updates_per_second;
+my %updates_per_minute;
 while (@brackets ) {
     my $start = shift @brackets;
     my $contents_start = decode_json $start;
@@ -49,6 +50,7 @@ while (@brackets ) {
 	  $PUTs_per_second{$this_second}++;
 	  if ( $msg_start->{'updated'} == 1) {
 	      $updates_per_second{$this_second}++;
+	      $updates_per_minute{$minute}++;
 	  }
 	  $IPs_per_minute{$minute}{$this_ID}++;
 	  $PUTs_per_minute{$minute}++;
@@ -99,9 +101,11 @@ for my $ip ( sort { $PUTs_by_IP{$b} <=>$ PUTs_by_IP{$a} } keys %PUTs_by_IP) {
 close $file_by_IP;
 
 open (my $file_per_minute, ">" , $root_file."_per_minute.csv" )|| die "Can't open: $!";
-say $file_per_minute "time,IPs,PUTs";
+say $file_per_minute "time,IPs,PUTs,updates";
 for my $m ( sort { $a cmp $b } keys %IPs_per_minute) {
-    say $file_per_minute "$m,", scalar keys %{$IPs_per_minute{$m}} || 0, ",$PUTs_per_minute{$m}";
+    say $file_per_minute "$m,", scalar keys %{$IPs_per_minute{$m}} || 0
+      , ",$PUTs_per_minute{$m}, "
+      , $updates_per_minute{$m} || 0;
 }
 close $file_by_IP;
 

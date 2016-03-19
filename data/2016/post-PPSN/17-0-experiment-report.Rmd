@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE,cache=FALSE,echo=FALSE}
 
 library("ggplot2")
+library("RColorBrewer")
 experiment.data <- data.frame(Experiment=character(),
                               milliseconds=character(),                           
                               IPs=character(), 
@@ -47,7 +48,15 @@ ips.aggregates <- data.frame(Experiment=character(),
 minutes.data <- data.frame(Experiment=character(),                      
                             minute=character(),
                             IPs=character(),
-                            PUTs=character())
+                            PUTs=character(),
+                            updates=character(),
+                            ratio=character())
+
+seconds.data <- data.frame(Experiment=character(),                      
+                            second=character(),
+                            PUTs=character(),
+                            updates=character(),
+                            ratio=character())
 
 for ( i in these.experiments ) {
     this.data <- read.csv(paste0("nodio-2016-3-",i,"_by_exp.csv"))
@@ -114,7 +123,19 @@ for ( i in these.experiments ) {
                           data.frame(Experiment=i,                      
                             minute=IPs$minute,
                             IPs=IPs$IPs,
-                            PUTs=IPs$PUTs))
+                            PUTs=IPs$PUTs,
+                            updates=IPs$updates,
+                            ratio=IPs$updates/IPs$PUTs))
+    
+    seconds <- read.csv(paste0("nodio-2016-3-",i,"_per_second.csv"))
+    seconds$second <-  as.POSIXct(seconds$time, format="%Y-%m-%dT%H:%M:%S")
+
+    seconds.data <- rbind( seconds.data,
+                          data.frame(Experiment=i,                      
+                            second=seconds$second,
+                            PUTs=seconds$PUTs,
+                            updates=seconds$updates,
+                            ratio=seconds$updates/seconds$PUTs))
 }
 
 experiment.data$newgraph <- grepl("newgraph",experiment.data$Experiment)
@@ -132,7 +153,16 @@ This is the report on the experiment performed on the afternoon of March 17th an
 
 ```{r timegraph, cache=FALSE,echo=FALSE}
 ggplot(data=minutes.data, aes(x=minute,y=IPs))+ scale_x_datetime()+geom_line()+stat_smooth()
-ggplot(data=minutes.data, aes(x=minute,y=PUTs))+ scale_x_datetime()+geom_line()+stat_smooth()
-ggplot(data=minutes.data, aes(x=IPs,y=PUTs))+geom_point()
+ggplot(data=minutes.data, aes(x=minute,y=ratio))+ scale_x_datetime()+geom_line()+stat_smooth()
+ggplot(data=minutes.data, aes(x=minute,y=PUTs,color=ratio))+ scale_x_datetime()+geom_point()+stat_smooth()
+ggplot(data=minutes.data)+geom_point(aes(x=IPs,y=PUTs,size=ratio,color=updates))
+
 ```
+
+```{r secondgraph, cache=FALSE,echo=FALSE}
+max <- max(seconds$PUTs)
+this.palette <- colorRampPalette(brewer.pal(12,"Paired"))
+ggplot(data=seconds.data, aes(x=second,y=ratio))+ scale_x_datetime()+geom_point(aes(color=factor(PUTs)))+scale_color_manual(values=this.palette(max))+stat_smooth()
+ggplot(data=seconds.data, aes(x=second,y=PUTs,color=ratio))+ scale_x_datetime()+geom_point()+stat_smooth()
+
 

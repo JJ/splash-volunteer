@@ -8,7 +8,7 @@ use v5.14;
 use JSON;
 use File::Slurp::Tiny qw(read_lines);
 use DateTime::Format::RFC3339;
-use Data::Password::Entropy;
+use Compress::Zlib;
 
 my $file_name = shift || "data/2016/post-PPSN/nodio-2016-3-18-0.log";
 
@@ -91,8 +91,8 @@ while (@brackets ) {
       for my $p ( sort { $a cmp $b } keys %these_PUTs) {
 	  $put_string .= chr(32+$these_PUTs{$p});
       }
-      my $this_entropy = password_entropy($put_string)/length($put_string);
-      my $cache_entropy = password_entropy($cache_seq)/length($cache_seq);;
+      my $this_entropy = (length(Compress::Zlib::memGzip($put_string))-10)/length($put_string);
+      my $cache_entropy = (length(Compress::Zlib::memGzip($cache_seq))-10)/length($cache_seq);;
       push @times, 
 	[ scalar keys %these_IPs, 
 	  $duration->in_units('minutes')*60000+$duration->in_units('nanoseconds')/1e6, 

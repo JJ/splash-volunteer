@@ -42,6 +42,7 @@ while (@brackets ) {
     my $reboots = 0;
     my $last_fitness_by_IP = 0;
     my %these_PUTs;
+    my $cache_seq; 
     while ( $JSON_msg !~ /solution/ ) {
       if ( $JSON_msg !~ /start/ ) {
 	  $puts++;
@@ -49,6 +50,7 @@ while (@brackets ) {
 	  my $this_ID = $msg_start->{'worker_uuid'}?$msg_start->{'worker_uuid'}:$msg_start->{'IP'};
 	  my ($minute,$second) = ( $msg_start->{'timestamp'} =~ /(.+T\d+:\d+):(\d+)/);
 	  my $this_second = "$minute:$second";
+	  $cache_seq .= chr(32+$msg_start->{'cache_size'});
 	  $PUTs_per_second{$this_second}++;
 	  $these_PUTs{$this_second}++;
 	  if ( $msg_start->{'updated'} == 1) {
@@ -90,18 +92,21 @@ while (@brackets ) {
 	  $put_string .= chr(32+$these_PUTs{$p});
       }
       my $this_entropy = password_entropy($put_string)/length($put_string);
+      my $cache_entropy = password_entropy($cache_seq)/length($cache_seq);;
       push @times, 
 	[ scalar keys %these_IPs, 
 	  $duration->in_units('minutes')*60000+$duration->in_units('nanoseconds')/1e6, 
 	  $puts, scalar keys %these_actual_IPs, $real_puts, $reboots, 
-	  $this_entropy ]; #milliseconds
+	  $this_entropy, $cache_entropy ]; #milliseconds
     }
 }
 
 my ($root_file) = ($file_name =~ /(.+)\.log/);
 open (my $file_by_exp, ">" ,$root_file."_by_exp.csv") || die "Can't open: $!";
-say $file_by_exp "IPs,milliseconds,PUTs,actualIPs,actualPUTs,reboots,entropy";
-say $file_by_exp join("\n", map("$_->[0],$_->[1],$_->[2],$_->[3],$_->[4],$_->[5],$_->[6]",@times));
+say $file_by_exp "IPs,milliseconds,PUTs,actualIPs,actualPUTs,reboots,entropy,cacheEntropy";
+say $file_by_exp 
+  join("\n", 
+       map("$_->[0],$_->[1],$_->[2],$_->[3],$_->[4],$_->[5],$_->[6],$_->[7]",@times));
 close $file_by_exp;
 
 open (my $file_by_IP, ">" , $root_file."_by_IP.csv" )|| die "Can't open: $!";

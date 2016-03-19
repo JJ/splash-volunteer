@@ -91,8 +91,9 @@ while (@brackets ) {
       for my $p ( sort { $a cmp $b } keys %these_PUTs) {
 	  $put_string .= chr(32+$these_PUTs{$p});
       }
-      my $this_entropy = (length(Compress::Zlib::memGzip($put_string))-10)/length($put_string);
-      my $cache_entropy = (length(Compress::Zlib::memGzip($cache_seq))-10)/length($cache_seq);;
+      # Extra header has 10 bytes
+      my $this_entropy = (length(Compress::Zlib::memGzip($put_string))-20)/length($put_string);
+      my $cache_entropy = (length(Compress::Zlib::memGzip($cache_seq))-20)/length($cache_seq);;
       push @times, 
 	[ scalar keys %these_IPs, 
 	  $duration->in_units('minutes')*60000+$duration->in_units('nanoseconds')/1e6, 

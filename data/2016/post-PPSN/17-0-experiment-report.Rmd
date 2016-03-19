@@ -155,7 +155,7 @@ This is the report on the experiment performed on the afternoon of March 17th an
 #IPs
 
 ```{r experiment, cache=FALSE,echo=FALSE}
-ggplot(data=experiment.data)+geom_point(aes(x=milliseconds,y=entropy,size=PUTs,color=IPs))
+ggplot(data=experiment.data)+geom_point(aes(x=milliseconds,y=entropy,size=PUTs,color=IPs))+scale_x_log10()+scale_y_log10()
 ```
 
 ```{r timegraph, cache=FALSE,echo=FALSE}

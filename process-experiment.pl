@@ -8,6 +8,7 @@ use v5.14;
 use JSON;
 use File::Slurp::Tiny qw(read_lines);
 use DateTime::Format::RFC3339;
+use Data::Password::Entropy;
 
 my $file_name = shift || "log/w-workers.log";
 

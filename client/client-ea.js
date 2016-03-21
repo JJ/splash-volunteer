@@ -37,7 +37,7 @@ console.log( "Starting ");
 // start running the GA
 var generation_count = 0;
 
-// Start loop
+// Start async loop
 generation();
 
 // ---------------------------------
@@ -50,15 +50,15 @@ function generation() {
 	setImmediate(generation);
 
 	if (generation_count % 100 === 0 ) {
-	    // get from pool
-	    rest.get( url + 'random' ).on('complete', function( data ) {
+	    
+	    // put in pool
+	    rest.put( url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] ).on('complete', function( data ) {
 		if ( data.chromosome ) {
+		    console.log( "Data " );
+		    console.log( data );
 		    eo.incorporate( data.chromosome );
 		}
 	    });
-	    
-	    // put in pool
-	    rest.put( url + 'one/' + eo.population[0] + "/" + eo.fitness_of[eo.population[0]] );
 	}
     } else {
 	// to force the end of the experiment

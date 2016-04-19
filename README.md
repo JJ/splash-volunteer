@@ -10,7 +10,7 @@ node index.js
 
 If you want to use a Telegram channel, you need to add two environment variables:
 * CHANNELID: your channel ID in "@mycoolchannel" format
-* TOKEN: your bot token
+* TOKENBOT: your bot token
 
 
 # Badges

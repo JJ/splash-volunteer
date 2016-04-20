@@ -2,6 +2,17 @@
 
 Splash page for PaaS based volunteer computing experiments.
 
+# How to run
+```
+npm install
+node index.js
+```
+
+If you want to use a Telegram channel, you need to add two environment variables:
+* CHANNELID: your channel ID in "@mycoolchannel" format
+* TOKENBOT: your bot token
+
+
 # Badges
 
 [![Coverage Status](https://coveralls.io/repos/github/JJ/splash-volunteer/badge.svg?branch=master)](https://coveralls.io/github/JJ/splash-volunteer?branch=master) [![Build Status](https://travis-ci.org/JJ/splash-volunteer.svg?branch=master)](https://travis-ci.org/JJ/splash-volunteer)

@@ -3,16 +3,21 @@ express = require('express'),
 app = express(),
 winston = require('winston'),
 leroux = require('leroux-cache'),
+bot = require('./bot.js');
 App = require("app.json"); // Used for configuration and by Heroku
+
+//Bot configuration
+var id = process.env.CHANNELID;
+var token = process.env.TOKENBOT;
 
 // Includes termination condition
 app.is_solution = require("./is_solution.js");
 
-// Other configuration variables 
+// Other configuration variables
 app.config = App.new(__dirname + "/app.json");
 
 // configure for openshift or heroku
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'; 
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 app.set('port', (process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 5555));
 app.set('trust proxy', true );
 var log_dir = process.env.OPENSHIFT_DATA_DIR || "log";
@@ -48,7 +53,7 @@ app.get('/random', function(req, res){
     } else {
 	res.status(404).send('No chromosomes yet');
     }
-    
+
 });
 
 // Retrieves the whole chromosome pool
@@ -94,7 +99,7 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	    cache.set( req.params.chromosome, req.params.fitness); // to avoid repeated chromosomes
 	    ip_cache.set(client_ip, req.params.chromosome );
 	    updated = true;
-	} 
+	}
 
 	logger.info("put", { chromosome: req.params.chromosome,
 			     fitness: parseFloat(req.params.fitness),
@@ -106,7 +111,9 @@ app.put('/one/:chromosome/:fitness', function(req, res){
 	    logger.info( "finish", { solution: req.params.chromosome } );
 	    cache = leroux({sweepDelay: 200, maxSize: app.config.vars.cache_size || 128});;
 	    sequence++;
-	    logger.info( { "start": sequence });	    
+      if(token!="" && id!="")
+        bot.sendMessage(token, id, "Other experiment starts");
+	    logger.info( { "start": sequence });
 	}
 	res.send( { chromosome: random_chromosome,
 		    length : cache.size,
@@ -114,7 +121,7 @@ app.put('/one/:chromosome/:fitness', function(req, res){
     } else {
 	res.send( { length : 0 });
     }
-    
+
 });
 
 // Error check
@@ -126,6 +133,8 @@ app.use(function(err, req, res, next){
 // Start listening
 app.listen(app.get('port'), server_ip_address, function() {
     console.log("Node app is running at localhost:" + app.get('port'));
+    if(token!="" && id!="")
+      bot.sendMessage(token, id, "Other experiment starts");
     logger.info( { "start": sequence });
 })
 

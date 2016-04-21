@@ -2,7 +2,7 @@
 
 @import url(http://fonts.googleapis.com/css?family=Gilda+Display|Josefin+Slab);
 
-body { 
+body {
   font-family: 'Gilda Display', serif;
   background-color: #561420;
   color: 333333 }
@@ -16,7 +16,7 @@ header { background-color: #CCCCCC;
                 padding:40px; }
 
 footer { background-color: #CCCCCC;
-         padding:20px; }      
+         padding:20px; }
 
 .units-row { margin:20px}
 
@@ -26,10 +26,29 @@ footer { background-color: #CCCCCC;
                                padding:20px
                                }
 
- 
+
 
 .bkg { background-color:rgba(86,20,32,0.7);
          padding: 20px;
          border-radius: 30px}
 .reveal li { font-size:1.75em }
 .reveal li.credits { font-size:1.2em }
+
+.social{
+  color: #fff;
+}
+
+#twitter:hover{
+  color:#55acee;
+}
+#googleplus:hover{
+  color:#dc4e41;
+}
+
+#facebook:hover{
+  color:#3b5998;
+}
+
+#linkedin:hover{
+  color:#0077b5;
+}

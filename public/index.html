@@ -2,17 +2,17 @@
 <html>
     <head>
       <title>Distributed Evolutionary Algorithm</title>
-     
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-     
+
     <link rel="stylesheet" href="css/kube.min.css" />
     <link rel="stylesheet" href="css/extra.css" />
-     
+
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <script src="js/kube.min.js"></script>
-     
+
     <!-- for Chart -->
     <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
 
@@ -21,20 +21,30 @@
       <header id='header'>
 	<h1>Distributed <a href='https://en.wikipedia.org/wiki/Evolutionary_computation' target="_new">evolutionary computation</a>: a demo</h1>
       </header>
+    <section>
+      <h2>You are doing science: tell your friends to join!
+        <a id="twitter" class="social" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fnodio-jmerelo.rhcloud.com%2F&ref_src=twsrc%5Etfw&text=I%20am%20participating%20in%20an%20experiment%20of%20open%20science.%20Join!&tw_p=tweetbutton&url=http%3A%2F%2Fnodio-jmerelo.rhcloud.com%2F">
+        Twitter</a>
+        <a id="facebook" class="social" href="https://www.facebook.com/sharer/sharer.php?u=http%3A//nodio-jmerelo.rhcloud.com/">Facebook</a>
+        <a id="googleplus" class="social" href="https://plus.google.com/share?url=http%3A//nodio-jmerelo.rhcloud.com/">Google+</a>
+        <a id="linkedin" class="social" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A//nodio-jmerelo.rhcloud.com/&title=Volunteer%20experiment&summary=I%20am%20participating%20in%20an%20experiment%20of%20open%20science.%20Join!&source=">LinkedIn</a>
+      </h2>
 
+
+    </section>
     <div id='main'>
       <div class='units-row'>
 	<div class='unit-50' id='canvas'>
 	  <h2><i class="fa fa-bar-chart"></i> How are we doing</h2>
 	  <canvas id="fitness" style='width:95%;height:80%'></canvas>
 	</div>
-	
+
 	<div class='unit-50' id='ips_canvas'>
 	  <h2><i class="fa fa-line-chart"></i> How much we are contributing</h2>
 	  <canvas id="IPs" style='width:95%;height:80%'></canvas>
 	</div>
       </div>
-      
+
       <div class='units-row'>
 	<div class='unit-10'><h2> Best</h2></div>
 	<div class='unit-80' id='best'></div>
@@ -57,9 +67,9 @@
 	  generations the best chromosome to the server, receiving a
 	  random one. The row above represents the best chromosome so
 	  far in shades of gray. The best one will be all black; the
-	  algorithm will stop when it finds it.</p>  
+	  algorithm will stop when it finds it.</p>
 	</div>
-	
+
 	<div class='unit-30'>
 	  <h2><i class="fa fa-cog"> </i>Get the data</h2>
 
@@ -68,9 +78,9 @@
 	      from GitHub</a>. Please
 	  use <a href='https://github.com/JJ/splash-volunteer/issues'>the
 	  issues section for suggestions and questions, as well as
-	      feature requests.</a></p> 
+	      feature requests.</a></p>
 	</div>
-	
+
       </div>
     </div>
 
@@ -88,5 +98,6 @@
   ga('send', 'pageview');
 
     </script>
+
     </body>
     </html>

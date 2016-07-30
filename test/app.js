@@ -1,3 +1,6 @@
+// Set environment variable 
+process.env.OPENSHIFT_DATA_DIR = '/tmp/log';
+
 var request = require('supertest'), 
 should = require('should'),
 app = require('../index.js'),
@@ -7,6 +10,18 @@ one_chromosome = { "string": "101101101101",
 		   "fitness": 0 },
 great_chromosome = { "string": "whatever",
 		     "fitness": 60 };
+
+describe( "Empty cache", function() {
+    it('Should be really empty', function( done ) {
+	request(app)
+	    .get('/random')
+	    .expect(404)
+	    .end( function( error, resultado ) {
+		resultado.body.should.have.property('No chromosomes');
+	    });
+	done();
+    });
+});
 
 describe( "Loads configuration correctly", function() {
     it('Should set repo correctly', function( done ) {
@@ -77,8 +92,6 @@ describe( "Puts and returns chromosome", function() {
     		if ( error ) {
     		    return done( error );
     		}
-    		console.log("Resultado");
-    		console.log(resultado.body);
     		resultado.body.should.have.property('chromosome');
     		done();
     	    });
@@ -174,7 +187,6 @@ describe( "Stress-tests cache", function() {
 		    return done( error );
 		}
 		resultado.body.should.be.instanceof(Object);
-//		console.log(Object.keys(resultado.body).length);
 		Object.keys(resultado.body).length.should.be.above( app.config.vars.cache_size -1 );
 		done();
 	    });

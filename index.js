@@ -27,7 +27,7 @@ if (!fs.existsSync(log_dir)){
 // set up static dir
 app.use(express.static(__dirname + '/public'))
 var log_file_name = get_winston_filename( log_dir );
-console.log( log_file_name );
+// console.log( log_file_name );
 // create logger to console and file
 var logger = new (winston.Logger)({
     transports: [
@@ -43,15 +43,15 @@ var IPs = {};
 var sequence = 0;
 
 // Retrieves a random chromosome
-app.get('/random', function(req, res){
-//    console.log( "Cache size " + cache.size );
+app.get('/random', function(req, res, next
+){
     if (cache.size > 0) {
 	var random_chromosome = get_random_element();
-//	console.log("Random " + random_chromosome);
 	res.send( { 'chromosome': random_chromosome } );
 	logger.info('get');
     } else {
-	res.status(404).send('No chromosomes yet');
+	res.status(404).send({ 'No chromosomes': true });
+	logger.info('get from empty cache');
     }
 
 });
@@ -169,8 +169,6 @@ function get_random_element () {
 	cache.forEach( function( value, key, cache ) {
 	    keys.push(key);
 	});
-	console.log( "keys " );
-	console.log( keys.length );
 	if ( keys.length === 1 ) {
 	    return keys[0];
 	} else {

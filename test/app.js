@@ -21,6 +21,7 @@ describe( "Loads configuration correctly", function() {
 
 describe( "Loads termination correctly", function() {
     it('Should terminate when needed', function( done ) {
+	app.is_solution(great_chromosome.string,null).should.not.be.ok;
 	app.is_solution(great_chromosome.string,great_chromosome.fitness).should.be.ok;
 	done();
     });

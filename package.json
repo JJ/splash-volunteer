@@ -14,7 +14,7 @@
     "express": "^4.0.0",
     "istanbul": "^0.4.2",
     "leroux-cache": "^0.1.1",
-    "nodeo": ">=0.0.5",
+    "nodeo": ">=0.2.0",
     "request": "^2.72.0",
     "winston": "^2.0.0"
   },

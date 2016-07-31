@@ -1,5 +1,7 @@
 # Single page volunteer computing platform
 
+[![dependencies Status](https://david-dm.org/JJ/splash-volunteer/status.svg)](https://david-dm.org/JJ/splash-volunteer)
+
 Splash page for PaaS based volunteer computing experiments.
 
 # How to run

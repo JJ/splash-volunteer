@@ -9,14 +9,14 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
-    "app.json": "~1.2.1",
+    "app.json": "^1.3.0",
     "coveralls": "^2.11.8",
-    "express": "~3.4.x",
+    "express": "^4.0.0",
     "istanbul": "^0.4.2",
     "leroux-cache": "^0.1.1",
     "nodeo": ">=0.0.5",
     "request": "^2.72.0",
-    "winston": "^0.9.0"
+    "winston": "^2.0.0"
   },
   "engines": {
     "node": ">=0.10.x",

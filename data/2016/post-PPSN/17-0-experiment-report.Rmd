@@ -20,7 +20,6 @@ experiment.data <- data.frame(Experiment=character(),
                               entropy=character(),
                               cacheEntropy=character())
 
-these.experiments <- c("17-0")
 
 experiment.aggregates <- data.frame(Experiment=character(),
                                     milliseconds=character(),
@@ -62,14 +61,13 @@ seconds.data <- data.frame(Experiment=character(),
                             updates=character(),
                             ratio=character())
 
-for ( i in these.experiments ) {
-    this.data <- read.csv(paste0("nodio-2016-3-",i,"_by_exp.csv"))
+this.data <- read.csv(paste0("nodio-2016-3-17-0_by_exp.csv"))
 
-    this.ip.data <- read.csv(paste0("nodio-2016-3-",i,"_by_IP.csv"))
-    this.len <- length(this.ip.data$PUTs)
-    seq <- 1:this.len
-    ips.data <- rbind(ips.data,
-                      data.frame(Experiment=rep(i,length(this.ip.data$PUTs)),
+this.ip.data <- read.csv(paste0("nodio-2016-3-17-0_by_IP.csv"))
+this.len <- length(this.ip.data$PUTs)
+seq <- 1:this.len
+ips.data <- rbind(ips.data,
+                      data.frame(Experiment=rep("17-0",length(this.ip.data$PUTs)),
                                  idu=seq,
                                  idx=seq/this.len,
                                  PUTs=as.integer(this.ip.data$PUTs),
@@ -77,7 +75,7 @@ for ( i in these.experiments ) {
                        )
     
     ips.aggregates <- rbind( ips.aggregates,
-                            data.frame(Experiment=i,
+                            data.frame(Experiment="17-0",
                                        PUTs = median(this.ip.data$PUTs),
                                        reboots = median(this.ip.data$reboots),
                                        avgPUTs = mean(this.ip.data$PUTs),
@@ -86,7 +84,7 @@ for ( i in these.experiments ) {
                             )
     
     experiment.aggregates <- rbind( experiment.aggregates,
-                                   data.frame( Experiment=i,                   
+                                   data.frame( Experiment="17-0",                   
                                               milliseconds=median(as.integer(this.data$milliseconds)),
                                               IPs=median(as.integer(this.data$IPs)),
                                               actualIPs=median(as.integer(this.data$actualIPs)),
@@ -102,7 +100,7 @@ for ( i in these.experiments ) {
                                    )
     
     experiment.data <- rbind( experiment.data,
-                              data.frame( Experiment=rep(i, length(this.data$IPs)),                   
+                              data.frame( Experiment=rep("17-0", length(this.data$IPs)),                   
                                         milliseconds=as.integer(this.data$milliseconds),
                                         IPs=as.integer(this.data$IPs),
                                         actualIPs=as.integer(this.data$actualIPs),
@@ -116,7 +114,7 @@ for ( i in these.experiments ) {
 
     this.data <- this.data[this.data$actualPUTs>=16,]
     experiment.aggregates.filtered <- rbind( experiment.aggregates.filtered,
-                                            data.frame( Experiment=i,                   
+                                            data.frame( Experiment="17-0",                   
                                                        milliseconds=median(as.integer(this.data$milliseconds)),
                                                        IPs=median(as.integer(this.data$IPs)),
                                                        actualIPs=median(as.integer(this.data$actualIPs)),
@@ -128,27 +126,27 @@ for ( i in these.experiments ) {
                                                        )
                                             )
     
-    IPs <- read.csv(paste0("nodio-2016-3-",i,"_per_minute.csv"))
+    IPs <- read.csv(paste0("nodio-2016-3-17-0_per_minute.csv"))
     IPs$minute <-  as.POSIXct(IPs$time, format="%Y-%m-%dT%H:%M")
 
     minutes.data <- rbind( minutes.data,
-                          data.frame(Experiment=i,                      
+                          data.frame(Experiment="17-0",                      
                             minute=IPs$minute,
                             IPs=IPs$IPs,
                             PUTs=IPs$PUTs,
                             updates=IPs$updates,
                             ratio=IPs$updates/IPs$PUTs))
     
-    seconds <- read.csv(paste0("nodio-2016-3-",i,"_per_second.csv"))
+    seconds <- read.csv(paste0("nodio-2016-3-17-0_per_second.csv"))
     seconds$second <-  as.POSIXct(seconds$time, format="%Y-%m-%dT%H:%M:%S")
 
     seconds.data <- rbind( seconds.data,
-                          data.frame(Experiment=i,                      
+                          data.frame(Experiment="17-0",                      
                             second=seconds$second,
                             PUTs=seconds$PUTs,
                             updates=seconds$updates,
                             ratio=seconds$updates/seconds$PUTs))
-}
+
 
 ```
 
